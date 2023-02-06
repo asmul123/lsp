@@ -47,15 +47,6 @@
                                         <i class="fa fa-plus text-white"></i>
                                         Tambah Data Skema
                                     </a>
-                                    <div class="btn-group pull-right">
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Opsi Data <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right mt-5" style="box-shadow: 0 0 5px 0px #000;">
-                                            <li><a href="<?= base_url('skema/export')  ?>">Export Data Skema</a></li>
-                                            <li><a href="<?= base_url('skema/import')  ?>">Import Data Skema</a></li>
-                                        </ul>
-                                    </div>
                                 <?php  } ?>
                             <?php  } ?>
                             <table id="dataSiswaIndex" class="display table table-striped table-bordered" cellspacing="0" width="100%">
