@@ -119,6 +119,9 @@ class Pengguna extends CI_Controller
 	{
 		$id = $this->session->userdata('tipeuser');
 		$data['datapengguna'] = $this->Mpengguna->getpenggunadetail($this->session->userdata('id_user'));
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		$data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Profile'])->row()->id_menus;
+
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $data);
 		$this->load->view('v_pengguna/v_pengguna-profile', $data);
