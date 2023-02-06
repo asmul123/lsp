@@ -68,7 +68,7 @@
                                             <div class="profile-name">
                                                 <h6><?= $this->session->userdata('nama'); ?></h6>
                                                 <?php if ($this->session->userdata('tipeuser') == 1) : ?>
-                                                    <a href="<?php echo base_url('profile') ?>">Lihat Profil</a>
+                                                    <a href="<?php echo base_url('pengguna/profile') ?>">Lihat Profil</a>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="clearfix"></div>

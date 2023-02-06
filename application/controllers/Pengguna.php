@@ -115,6 +115,16 @@ class Pengguna extends CI_Controller
 		$this->load->view('template/footer');
 	}
 
+	public function profile()
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['datapengguna'] = $this->Mpengguna->getpenggunadetail($this->session->userdata('id_user'));
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_pengguna/v_pengguna-profile', $data);
+		$this->load->view('template/footer');
+	}
+
 	public function edt_process()
 	{
 		$id = $this->input->post('id', true);

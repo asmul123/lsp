@@ -2,7 +2,7 @@
     <div class="container-fluid bg-white">
         <div class="row page-title-div">
             <div class="col-sm-6">
-                <h2 class="title">Ubah Data Pengguna</h2>
+                <h2 class="title">Ubah Profile</h2>
                 <p class="sub-title">LSP P1 - SMK NEGERI 4 GARUT</p>
             </div>
             <div class="row">
@@ -19,7 +19,7 @@
                         <div class="form-group has-feedback">
                             <label for="name5">Nama Lengkap*</label>
                             <input type="hidden" name="id" value="<?= $datapengguna['id'] ?>">
-                            <input type="text" class="form-control" name="nama" value="<?= $datapengguna['nama'] ?>" required autofocus>
+                            <input type="text" class="form-control" name="nama" value="<?= $datapengguna['nama'] ?>" readonly autofocus>
                             <span class="fa fa-user form-control-feedback"></span>
                             <span class="help-block">Masukan Nama Pengguna</span>
                         </div>
@@ -40,20 +40,6 @@
                             <input type="password" class="form-control" name="password2">
                             <span class="fa fa-key form-control-feedback"></span>
                             <span class="help-block">Masukan Lagi Kata Sandi</span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            <label for="name5">Level Pengguna</label>
-                            <select name="user_level" class="form-control">
-                                <?php $levelpengguna = $this->Mpengguna->getlevelpengguna();
-                                foreach ($levelpengguna as $lv) :
-                                ?>
-                                    <option value="<?= $lv->id ?>" <?php if ($datapengguna['user_level'] == $lv->id) {
-                                                                        echo "selected";
-                                                                    } ?>><?= $lv->userlevel ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <span class="fa fa-key form-control-feedback"></span>
-                            <span class="help-block">Pilih Level Pengguna</span>
                         </div>
                         <div class="form-group has-feedback">
                             <a href="<?= base_url('pengguna') ?>" class="btn btn-primary btn-labeled"><i class="fa fa-arrow-left"></i>Kembali</a>

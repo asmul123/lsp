@@ -42,6 +42,7 @@
                             </li>
 
                         <?php } ?>
+                        <li><a href="<?= base_url('clogin/logout') ?>"><i class="fa fa-sign-out"></i> Keluar</a></li>
                     </ul>
                 </div>
                 <!-- /.sidebar-nav -->
