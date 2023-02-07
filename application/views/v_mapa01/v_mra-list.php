@@ -81,7 +81,6 @@
                                 <tbody>
                                     <?php
                                     $no = 0;
-                                    $No = 0;
                                     foreach ($dataelemen as $de) :
                                     ?>
                                         <tr>
@@ -157,7 +156,6 @@
                                         endforeach;
                                         ?>
                                         </tr> <?php
-                                                $No++;
                                             endforeach;
 
                                                 ?>

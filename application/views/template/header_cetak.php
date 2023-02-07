@@ -26,7 +26,7 @@
     <script src="js/modernizr/modernizr.min.js"></script>
 </head>
 
-<body class="top-navbar-fixed">
+<body onload="window.print();">
     <div class="main-wrapper"><!-- Content Header (Page header) -->
         <div class="container">
             <section class="content">

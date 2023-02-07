@@ -283,4 +283,29 @@ class Mapa01 extends CI_Controller
 			redirect(base_url('mapa01/index/' . $idskema));
 		}
 	}
+
+	public function cetak($idskema)
+	{
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+		$this->load->library('pdfgenerator');
+
+		$file_pdf = 'FR.APL.02. ASESMEN MANDIRI';
+		// setting paper
+		$paper = 'A4';
+		//orientasi paper potrait / landscape
+		$orientation = "potrait";
+
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datamapa011'] = $this->Mmapa01->getmapa011($idskema);
+		$data['datamapa013'] = $this->Mmapa01->getmapa013($idskema);
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['dataunit'] = $this->Mskema->getunit($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		// $html = $this->load->view('v_mapa01/v_mapa01-cetak', $data, true);
+		$this->load->view('v_mapa01/v_mapa01-cetak', $data);
+		$this->load->view('template/footer_cetak');
+
+		// $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+	}
 }

@@ -145,19 +145,34 @@ class Pengguna extends CI_Controller
 
 		if ($cekUsername == 'kosong') {
 			if ($password != 'tidaksesuai') {
-				if ($this->input->post('password', true) == "") {
-					$data2 = array(
-						'username' => $username,
-						'nama' => $nama,
-						'user_level' => $user_level
-					);
+				if ($user_level) {
+					if ($this->input->post('password', true) == "") {
+						$data2 = array(
+							'username' => $username,
+							'nama' => $nama,
+							'user_level' => $user_level
+						);
+					} else {
+						$data2 = array(
+							'username' => $username,
+							'nama' => $nama,
+							'password' => $password,
+							'user_level' => $user_level
+						);
+					}
 				} else {
-					$data2 = array(
-						'username' => $username,
-						'nama' => $nama,
-						'password' => $password,
-						'user_level' => $user_level
-					);
+					if ($this->input->post('password', true) == "") {
+						$data2 = array(
+							'username' => $username,
+							'nama' => $nama
+						);
+					} else {
+						$data2 = array(
+							'username' => $username,
+							'nama' => $nama,
+							'password' => $password
+						);
+					}
 				}
 				$this->Mpengguna->edituser($data2, $id);
 				$this->session->set_flashdata('alert', '<div class="alert alert-success left-icon-alert" role="alert">

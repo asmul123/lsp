@@ -94,4 +94,16 @@ class Fria01 extends CI_Controller
 			redirect(base_url('fria01/list_sop/' . $de['id_unit']));
 		}
 	}
+
+	public function cetak($idskema)
+	{
+
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datamapa02'] = $this->Mmapa02->getmapa02($idskema);
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_mapa02/v_mapa02-cetak', $data);
+		$this->load->view('template/footer_cetak');
+	}
 }
