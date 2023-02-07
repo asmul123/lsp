@@ -1,15 +1,15 @@
 <table width="100%">
     <tr>
         <td align="left">
-            <h3 class="card-title"><b>FR.MAPA.02. PETA INSTRUMEN ASESSMEN HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN</b></h3>
+            <h3 class="card-title"><b>FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI</b></h3>
         </td>
         <td align="right"></td>
 
     </tr>
 </table>
-<table width="100%" border='1' cellpadding="4" cellspacing="0" align="center">
+<table width="100%" border='1' cellpadding="4" cellspacing="0">
     <tr>
-        <td rowspan="2" width="20%">Skema Sertifikasi<br>
+        <td rowspan="2">Skema Sertifikasi<br>
             ( <?= $dataskema["jenis_skema"] ?> )</td>
         <td>Judul</td>
         <td>:</td>
@@ -20,68 +20,152 @@
         <td>:</td>
         <td><?= $dataskema["nomor_skema"] ?></td>
     </tr>
+    <tr>
+        <td colspan="2">TUK</td>
+        <td>:</td>
+        <td>Sewaktu/Tempat Kerja/Mandiri*</td>
+    </tr>
+    <tr>
+        <td colspan="2">Nama Asesor</td>
+        <td>:</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2">Nama Asesi</td>
+        <td>:</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2">Tanggal</td>
+        <td>:</td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 <br>
 <table width="100%" border='1' cellpadding="4" cellspacing="0">
-    <thead>
+    <tr>
+        <td>PANDUAN BAGI ASESOR</td>
+    </tr>
+    <tr>
+        <td>
+            <ul>
+                <li>Lengkapi nama unit kompetensi, elemen, dan kriteria unjuk kerja sesuai kolom dalam tabel.</li>
+                <li>Istilah Acuan Pembanding dengan SOP/spesifikasi produk dari industri/organisasi dari tempat kerja atau simulasi tempat kerja</li>
+                <li>Beri tanda centang (<input type="checkbox" checked="checked" disabled>) pada kolom K jika Anda yakin asesi dapat melakukan/ mendemonstrasikan tugas sesuai KUK, atau centang (<input type="checkbox" checked="checked" disabled>) pada kolom BK bila sebaliknya.</li>
+                <li>Penilaian Lanjut diisi bila hasil belum dapat disimpulkan, untuk itu gunakan metode lain sehingga keputusan dapat dibuat.</li>
+            </ul>
+        </td>
+    </tr>
+</table>
+<br>
+<?php
+$No     = 1;
+foreach ($dataunit as $du) {
+?>
+    <table width="100%" border='1' cellpadding="4" cellspacing="0">
         <tr>
-            <td rowspan="2" align="center"><b>No</b></td>
-            <td rowspan="2" align="center"><b>MUK</b></td>
-            <td colspan="5" align="center"><b>Potensi Asesi ***</b></td>
+            <td width="19%" rowspan="2"><strong>Unit Kompetensi: <?= $No ?></strong></td>
+            <td colspan="2"><b>Kode Unit</b></td>
+            <td>:</td>
+            <td><?= $du->kode_unit ?></td>
         </tr>
         <tr>
-            <td align="center"><b>1</b></td>
-            <td align="center"><b>2</b></td>
-            <td align="center"><b>3</b></td>
-            <td align="center"><b>4</b></td>
-            <td align="center"><b>5</b></td>
+            <td colspan="2">Judul Unit</td>
+            <td>:</td>
+            <td><?= $du->judul_unit ?></td>
         </tr>
-    </thead>
-    <tbody>
+    </table>
+    <br>
+    <table width="100%" border='1' cellpadding="4" cellspacing="0">
+        <tr>
+            <td rowspan="2" align="center">No</td>
+            <td rowspan="2" align="center">Elemen</td>
+            <td rowspan="2" align="center">Kriteria Unjuk Kerja</td>
+            <td rowspan="2" align="center">Benchmark(SOP/spesifikasi produk industri)</td>
+            <td colspan="2" align="center">Rekomendasi</td>
+            <td rowspan="2" align="center">Penilaian Lanjut</td>
+        </tr>
+        <tr>
+            <td align="center">K</td>
+            <td align="center">BK</td>
+        </tr>
         <?php
         $No     = 1;
-        $refmapa02     = $this->Mmapa02->getrefmapa02();
-        $isi = explode('#', $datamapa02['isi']);
-        foreach ($refmapa02 as $rm) {
-            ${"v_isi_" . $No} = explode('-', $isi[$No]);
+        $dataelemen = $this->Mskema->getelemen($du->id);
+        foreach ($dataelemen as $de) {
+            $datakuk = $this->Mskema->getkuk($de->id);
+            $dataia01 = $this->Mfria01->getfria01($de->id);
+            $jmlcountkuk = $this->Mskema->cekKUK($de->id);
+            $nokuk = 0;
+            foreach ($datakuk as $dk) {
+                $nokuk++;
+                if ($nokuk == 1) {
         ?>
-            <tr>
-                <td align="center"><?= $No ?></td>
-                <td><?= $rm["muk"] ?></td>
+                    <tr>
+                        <td rowspan="<?= $jmlcountkuk ?>"><?= $No ?></td>
+                        <td rowspan="<?= $jmlcountkuk ?>"><?= $de->elemen ?></td>
+                        <td><?= $de->urutan ?>.<?= $dk->urutan ?>. <?= $dk->kuk_aktif ?></td>
+                        <td rowspan="<?= $jmlcountkuk ?>"><?php if ($dataia01) {
+                                                                echo $dataia01->sop;
+                                                            } ?></td>
+                        <td align="center"><input type="checkbox"></td>
+                        <td align="center"><input type="checkbox"></td>
+                        <td></td>
+                    </tr>
                 <?php
-                for ($i = 1; $i <= 5; $i++) {
+                } else {
                 ?>
-                    <td align="center"><input type="checkbox" name="radio<?= $No ?>" id="radio" value="<?= $i ?>" <?php
-                                                                                                                    if (${"v_isi_" . $No}['1'] == "$i") {
-                                                                                                                        echo "checked";
-                                                                                                                    }
-                                                                                                                    ?>></td>
-                <?php } ?>
-            </tr>
+                    <tr>
+                        <td><?= $de->urutan ?>.<?= $dk->urutan ?>. <?= $dk->kuk_aktif ?></td>
+                        <td align="center"><input type="checkbox"></td>
+                        <td align="center"><input type="checkbox"></td>
+                        <td></td>
+                    </tr>
         <?php
+                }
+            }
             $No++;
         }
 
         ?>
-        </tfoot>
+    </table>
+    <br>
+<?php
+    $No++;
+}
+?>
+<table width="100%" border='1' cellpadding="4" cellspacing="0">
+    <tr>
+        <td width="25%"> Umpan Balik untuk<br />Asesi : </td>
+        <td width="75%"></td>
+    </tr>
 </table>
 <br>
-*) diisi berdasarkan hasil penentuan pendekatan asesmen dan perencanaan asesmen<br>
-**) Keterangan:<br>
-<ol>
-    <li>
-        Hasil pelatihan dan / atau pendidikan, dimana Kurikulum dan fasilitas praktek mampu telusur terhadap standar kompetensi.
-    </li>
-    <li>
-        Hasil pelatihan dan / atau pendidikan, dimana kurikulum belum berbasis kompetensi.
-    </li>
-    <li>
-        Pekerja berpengalaman, dimana berasal dari industri/tempat kerja yang dalam operasionalnya mampu telusur dengan standar kompetensi.
-    </li>
-    <li>
-        Pekerja berpengalaman, dimana berasal dari industri/tempat kerja yang dalam operasionalnya belum berbasis kompetensi.
-    </li>
-    <li>
-        Pelatihan / belajar mandiri atau otodidak.
-    </li>
-</ol>
+<table width="100%" border='1' cellpadding="4" cellspacing="0">
+    <tr>
+        <td width="19%" valign="top">
+            <p>Nama:</p>
+        </td>
+        <td width="15%" valign="top">
+            <p>Asesi:</p>
+            <p>&nbsp;</p>
+        </td>
+        <td width="15%" valign="top">
+            <p>Asesor:</p>
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td valign="top"><strong>Tanda Tangan dan Tanggal</strong>
+            <p><strong></strong></p>
+            <p>&nbsp;</p>
+        </td>
+        <td valign="top">
+            <p>&nbsp;</p>
+        </td>
+        <td valign="top">
+            <p>&nbsp;</p>
+        </td>
+    </tr>
+</table>

@@ -153,4 +153,16 @@ class Fria02 extends CI_Controller
 																</div>');
 		redirect(base_url('fria02/index/' . $id_skema));
 	}
+
+	public function cetak($idskema)
+	{
+
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datafria02'] = $this->Mfria02->getfria02($idskema);
+		$data['dataunit'] = $this->Mskema->getunit($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_fria02/v_fria02-cetak', $data);
+		$this->load->view('template/footer_cetak');
+	}
 }

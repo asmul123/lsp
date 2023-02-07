@@ -99,11 +99,10 @@ class Fria01 extends CI_Controller
 	{
 
 		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
-		$data['datamapa02'] = $this->Mmapa02->getmapa02($idskema);
-		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['dataunit'] = $this->Mskema->getunit($idskema);
 		$data['idskema'] = $idskema;
 		$this->load->view('template/header_cetak');
-		$this->load->view('v_mapa02/v_mapa02-cetak', $data);
+		$this->load->view('v_fria01/v_fria01-cetak', $data);
 		$this->load->view('template/footer_cetak');
 	}
 }

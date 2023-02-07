@@ -48,3 +48,5 @@
                                         <td align="right" width="20%" style="border-bottom:double"><img src="<?= base_url() ?>assets/img/kop/<?= $datakop->logo_kanan ?>" width="100"></td>
                                     </tr>
                                 </table>
+                            </div>
+                            <div class="card-body">
