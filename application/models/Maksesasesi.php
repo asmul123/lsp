@@ -15,13 +15,13 @@ class Maksesasesi extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('tb_apl_01');
-        $this->db->join('tb_approve_apl01', 'tb_apl_01.id=tb_approve_apl01.id_apl');
+        $this->db->join('tb_approve_apl01', 'tb_apl_01.id_asesi=tb_approve_apl01.id_asesi');
         $this->db->where('tb_apl_01.id_asesi', $id);
         return $this->db->get()->row_array();
     }
     function getskema($id)
     {
-        $this->db->select('*');
+        $this->db->select('*, tb_sertifikasi.id as idser');
         $this->db->from('tb_sertifikasi');
         $this->db->join('tb_paket', 'tb_sertifikasi.id_paket=tb_paket.id');
         $this->db->where('id_asesi', $id);
@@ -35,5 +35,29 @@ class Maksesasesi extends CI_Model
         $this->db->join('tb_paket', 'tb_sertifikasi.id_paket=tb_paket.id');
         $this->db->where('id_asesi', $id);
         return $this->db->get()->num_rows();
+    }
+
+    function getcountapl01($id)
+    {
+        $this->db->select('id');
+        $this->db->from('tb_apl_01');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->num_rows();
+    }
+
+    function addapl01($data)
+    {
+        $this->db->insert('tb_apl_01', $data);
+    }
+
+    function addappapl01($data)
+    {
+        $this->db->insert('tb_approve_apl01', $data);
+    }
+
+    function editapl01($data, $id)
+    {
+        $this->db->where('id_asesi', $id);
+        $this->db->update('tb_apl_01', $data);
     }
 }

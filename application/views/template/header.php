@@ -30,11 +30,15 @@
     <script src="<?php echo base_url() ?>assets/Theme/js/modernizr/modernizr.min.js"></script>
     <!-- summernote -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/Theme/css/summernote/summernote.css">
-    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>vendor/signature/resources/css/bcPaint.css" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>vendor/signature/resources/css/demo-page.css" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>vendor/signature/resources/css/bcPaint.mobile.css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="<?= base_url() ?>vendor/signature/resources/js/bcPaint.js"></script>
+    <style>
+        /* mengatur ukuran canvas tanda tangan  */
+        canvas {
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            width: 100%;
+            height: 400px;
+        }
+    </style>
 </head>
 
 <body class="top-navbar-fixed">
