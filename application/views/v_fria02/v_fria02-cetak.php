@@ -47,7 +47,7 @@ $No     = 1;
 foreach ($datafria02 as $data) {
     $daftarunit = explode('#', $data->daftar_unit);
 ?>
-    Tugas Ke - <?= $No ?>
+    <strong>Tugas Ke - <?= $No ?></strong>
     <table width="100%" border='1' cellpadding="4" cellspacing="0">
         <tr>
             <td><b>Judul Tugas</b></td>

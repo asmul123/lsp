@@ -7,9 +7,7 @@
 <script src="<?php echo base_url() ?>assets/Theme/js/bootstrap/bootstrap.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/pace/pace.min.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/lobipanel/lobipanel.min.js"></script>
-<script src="<?php echo base_url() ?>assets/Theme/js/iscroll/iscroll.js">
-	j
-</script>
+<script src="<?php echo base_url() ?>assets/Theme/js/iscroll/iscroll.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/DataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/DataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
 
@@ -39,6 +37,8 @@
 
 <!-- Summernote -->
 <script src="<?= base_url() ?>assets/Theme/js/summernote/summernote.min.js"></script>
+
+
 <script>
 	$(function() {
 		// Summernote

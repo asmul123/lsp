@@ -165,4 +165,9 @@ class Fria02 extends CI_Controller
 		$this->load->view('v_fria02/v_fria02-cetak', $data);
 		$this->load->view('template/footer_cetak');
 	}
+
+	public function repair_skema()
+	{
+		echo $this->Mfria02->repair_skema();
+	}
 }

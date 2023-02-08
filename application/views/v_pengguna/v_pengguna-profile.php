@@ -42,7 +42,7 @@
                             <span class="help-block">Masukan Lagi Kata Sandi</span>
                         </div>
                         <div class="form-group has-feedback">
-                            <a href="<?= base_url('pengguna') ?>" class="btn btn-primary btn-labeled"><i class="fa fa-arrow-left"></i>Kembali</a>
+                            <a href="<?= base_url('welcome') ?>" class="btn btn-primary btn-labeled"><i class="fa fa-arrow-left"></i>Kembali</a>
                             <button type="Submit" class="btn btn-warning btn-labeled">
                                 <i class="fa fa-save"></i> Simpan Data Pengguna
                             </button>

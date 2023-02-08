@@ -29,4 +29,33 @@ class Mfria02 extends CI_Model
         $this->db->where('id', $id);
         $this->db->delete('tb_ia_02');
     }
+
+    function repair_skema()
+    {
+        $no = 0;
+        $gagal = 0;
+        $this->db->select('*');
+        $this->db->from('tb_ia_02');
+        $this->db->where('daftar_unit >', '0');
+        $query = $this->db->get()->result_array();
+        if ($query) {
+            foreach ($query as $q) :
+                // echo $q['daftar_unit'] . "<br>";
+                $this->db->select('id_skema');
+                $this->db->from('tb_unit');
+                $this->db->where('id', intval($q['daftar_unit']));
+                $r = $this->db->get()->row_array();
+                $data = array(
+                    'id_skema' => $r['id_skema'],
+                    'daftar_unit' => '#' . $q['daftar_unit']
+                );
+                $this->db->where('id', $q['id']);
+                $this->db->update('tb_ia_02', $data);
+                $no++;
+            endforeach;
+        } else {
+            $gagal++;
+        }
+        return "berhasil memperbaharui : " . $no . " data, gagal : " . $gagal . " data";
+    }
 }

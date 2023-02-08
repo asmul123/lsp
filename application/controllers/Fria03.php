@@ -125,4 +125,21 @@ class Fria03 extends CI_Controller
 																</div>');
 		redirect(base_url('fria03/index/' . $id_skema));
 	}
+
+	public function cetak($idskema)
+	{
+
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datafria03'] = $this->Mfria03->getfria03($idskema);
+		$data['dataunit'] = $this->Mskema->getunit($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_fria03/v_fria03-cetak', $data);
+		$this->load->view('template/footer_cetak');
+	}
+
+	public function repair_skema()
+	{
+		echo $this->Mfria03->repair_skema();
+	}
 }

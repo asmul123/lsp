@@ -24,6 +24,9 @@ class Pengguna extends CI_Controller
 
 	public function index($level = NULL)
 	{
+		if ($this->session->userdata('tipeuser') != "1") {
+			redirect(base_url('pengguna/profile'));
+		}
 		$id = $this->session->userdata('tipeuser');
 		$data['menu'] = $this->M_Setting->getmenu1($id);
 		if ($level == NULL) {

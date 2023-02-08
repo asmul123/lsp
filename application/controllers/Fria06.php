@@ -141,4 +141,9 @@ class Fria06 extends CI_Controller
 																</div>');
 		redirect(base_url('fria06/index/' . $id_skema));
 	}
+
+	public function repair_skema()
+	{
+		echo $this->Mfria06->repair_skema();
+	}
 }

@@ -34,7 +34,15 @@ class Welcome extends CI_Controller
 
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $data);
-		$this->load->view('template/index', $data);
+		if ($this->session->userdata('tipeuser') == 1) {
+			$this->load->view('template/index', $data);
+		} else if ($this->session->userdata('tipeuser') == 2) {
+			$this->load->view('v_asesor/v_beranda', $data);
+		} else if ($this->session->userdata('tipeuser') == 3) {
+			redirect(base_url('aksesasesi'));
+		} else {
+			$this->load->view('v_validator/v_beranda', $data);
+		}
 		$this->load->view('template/footer');
 	}
 }

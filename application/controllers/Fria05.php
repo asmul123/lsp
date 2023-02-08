@@ -35,6 +35,21 @@ class Fria05 extends CI_Controller
 		$this->load->view('template/footer');
 	}
 
+	public function cetak($idskema)
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['datafria05'] = $this->Mfria05->getfria05($idskema);
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		// $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+		$data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Data Skema'])->row()->id_menus;
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_fria05/v_fria05-list', $data);
+		$this->load->view('template/footer');
+	}
+
 	public function tambah($idskema)
 	{
 		$id = $this->session->userdata('tipeuser');
@@ -146,5 +161,43 @@ class Fria05 extends CI_Controller
 																<strong>Sukses!</strong> Berhasil Mengubah Pertanyaan.
 																</div>');
 		redirect(base_url('fria05/index/' . $id_skema));
+	}
+
+	public function repair_skema()
+	{
+		echo $this->Mfria05->repair_skema();
+	}
+
+	public function cetaksoal($idskema)
+	{
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datafria05'] = $this->Mfria05->getfria05($idskema);
+		$data['dataunit'] = $this->Mfria05->getunitfria05($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_fria05/v_fria05-cetak', $data);
+		$this->load->view('template/footer_cetak');
+	}
+
+	public function cetakkunci($idskema)
+	{
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datafria05'] = $this->Mfria05->getfria05($idskema);
+		$data['dataunit'] = $this->Mfria05->getunitfria05($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_fria05/v_fria05-kunci', $data);
+		$this->load->view('template/footer_cetak');
+	}
+
+	public function cetakjawaban($idskema)
+	{
+		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
+		$data['datafria05'] = $this->Mfria05->getfria05($idskema);
+		$data['dataunit'] = $this->Mfria05->getunitfria05($idskema);
+		$data['idskema'] = $idskema;
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_fria05/v_fria05-jawaban', $data);
+		$this->load->view('template/footer_cetak');
 	}
 }

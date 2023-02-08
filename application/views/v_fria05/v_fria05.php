@@ -68,7 +68,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">Kode Unit</th>
                                         <th class="text-center">Pertanyaan</th>
-                                        <th class="text-center">Jawaban</th>
+                                        <th class="text-center" style="min-width: 300px">Jawaban</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -91,12 +91,11 @@
                                                     $op = explode("#", $data->jawaban);
                                                     for ($i = 1; $i <= 5; $i++) {
                                                         $isiop = explode("_", $op[$i]);
-                                                        echo "<li><div class=\"row\"><div class=\"col-10\">" . $isiop['1'];
+                                                        echo "<li>" . $isiop['1'] . " ";
                                                         if ($data->kunci == $i) {
-                                                            echo "</div><div class=\"col-2\"> &#10004;</div>";
+                                                            echo "&#10004;";
                                                         }
-                                                        echo "</div>
-                                                </li>";
+                                                        echo "</li>";
                                                     } ?>
                                                 </ol>
                                             </td>
