@@ -15,7 +15,9 @@ class Ujikom extends CI_Controller
         $this->load->model('Mujikom');
         $this->load->model('Masesor');
         $this->load->model('Masesi');
+        $this->load->model('Maksesasesi');
         $this->load->model('M_Akses');
+        $this->load->helper('tgl_indo');
         cek_login_user();
     }
 
@@ -31,6 +33,64 @@ class Ujikom extends CI_Controller
         $this->load->view('template/sidebar', $data);
         $this->load->view('v_ujikom/v_ujikom.php', $data);
         $this->load->view('template/footer');
+    }
+
+    public function permohonan()
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['ujikom'] = $this->Mujikom->getAll();
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl01.php', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function proses_pengajuan($idasesi)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['dataasesi'] = $this->Masesi->getasesidetail($idasesi);
+        $data['dataapl01'] = $this->Maksesasesi->getApl01Asesi($idasesi);
+        $data['skema'] = $this->Maksesasesi->getskema($idasesi);
+        $data['idasesi'] = $idasesi;
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl01-app.php', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function apl01_process()
+    {
+        $id_asesi = $this->input->post('id_asesi', true);
+        $catatan = $this->input->post('catatan', true);
+        $status = $this->input->post('status', true);
+        $ttd = $this->input->post('ttd', false);
+        $jmlapl01 = $this->Maksesasesi->getcountapl01($id_asesi);
+        if ($jmlapl01 == 0) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Asesi Belum membuat Pengajuan</div>');
+            redirect(base_url('ujikom/proses_pengajuan/' . $id_asesi));
+        } else {
+            $data = array(
+                'status' => $status
+            );
+            $this->Maksesasesi->editapl01($data, $id_asesi);
+            $data2 = array(
+                'id_admin' => $this->session->userdata('id_user'),
+                'catatan' => $catatan,
+                'ttd_app' => $ttd,
+                'tgl_app' => date('Y-m-d'),
+            );
+            $this->Maksesasesi->editappapl01($data2, $id_asesi);
+            $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Pengajuan telah disimpan</div>');
+            redirect(base_url('ujikom/proses_pengajuan/' . $id_asesi));
+        }
     }
 
     public function asesorasesi($idpaket)
@@ -52,14 +112,14 @@ class Ujikom extends CI_Controller
     {
         $this->Mujikom->hapus($id);
         $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dihapus</div>');
-        redirect('ujikom');
+        redirect(base_url('ujikom'));
     }
 
     public function hapusrekam($id, $idpaket)
     {
         $this->Mujikom->hapusrekam($id);
         $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dihapus</div>');
-        redirect('ujikom/asesorasesi/' . $idpaket);
+        redirect(base_url('ujikom/asesorasesi/' . $idpaket));
     }
 
     public function form($idjadwal = NULL)
@@ -113,11 +173,11 @@ class Ujikom extends CI_Controller
         if ($id == "") {
             $this->Mujikom->tambah($data);
             $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Ditambahkan</div>');
-            redirect('ujikom');
+            redirect(base_url('ujikom'));
         } else {
             $this->Mujikom->ubah($id, $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Diperbaharui</div>');
-            redirect('ujikom');
+            redirect(base_url('ujikom'));
         }
     }
 
@@ -146,6 +206,6 @@ class Ujikom extends CI_Controller
             }
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Mendambahkan : ' . $berhasil . ' data dan gagal Menambahkan : ' . $gagal . ' data</div>');
-        redirect('ujikom/asesorasesi/' . $id_paket);
+        redirect(base_url('ujikom/asesorasesi/' . $id_paket));
     }
 }

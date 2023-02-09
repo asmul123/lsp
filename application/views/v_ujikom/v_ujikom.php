@@ -45,7 +45,7 @@
                             <a href="<?= base_url('ujikom/form') ?>" class="btn btn-primary ml-15"><i class="fa fa-plus"></i> Tambah Jadwal</a>
                         </div>
                         <div class="panel-body p-20">
-                            <table id="tb_tahunakademik" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                            <table id="dataSiswaIndex" class="display table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>

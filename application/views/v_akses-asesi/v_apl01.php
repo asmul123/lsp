@@ -22,6 +22,8 @@
                                 if ($HAD) {
                                     if ($HAD['status'] == 1 or $HAD['status'] == 2) {
                                         $disabled = "disabled";
+                                    } else {
+                                        $disabled = "";
                                     }
                                 } else {
                                     $disabled = "";
@@ -170,14 +172,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Tanda Tangan</label>
-                                                <?php if ($HAD) {
-                                                    if ($HAD['status'] == 1 or $HAD['status'] == 2) {
+                                                <?php if ($HAD and $HAD['status'] == 1 or $HAD['status'] == 2) {
                                                 ?>
-                                                        <img src='data:<?= $HAD['ttd'] ?>' />
-                                                    <?php
-                                                    }
+                                                    <img src='data:<?= $HAD['ttd'] ?>' />
+                                                <?php
                                                 } else {
-                                                    ?>
+                                                ?>
                                                     <div class="card-body">
                                                         <!-- canvas tanda tangan  -->
                                                         <canvas id="signature-pad" class="signature-pad"></canvas>
@@ -237,7 +237,7 @@
                                         <?php
                                         $data_skema = $this->Mskema->getskemadetail($skema['id_skema']);
                                         ?>
-                                        <table width="100%" border='1' cellpadding="4" cellspacing="4">
+                                        <table width="100%" border='1' cellpadding="4" cellspacing="0">
                                             <tr>
                                                 <td rowspan="2">Skema Sertifikasi<br>
                                                     ( <?= $data_skema["jenis_skema"] ?> )</td>
@@ -275,7 +275,7 @@
                                         <hr>
                                         Daftar Unit Kompetensi sesuai kemasan :
                                         <hr>
-                                        <table id="example1" class="table table-bordered table-striped">
+                                        <table id="dataSiswaIndex" class="display table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
@@ -299,7 +299,6 @@
                                                             $No++;
                                                         }
                                                             ?>
-                                                </tfoot>
                                         </table>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="bukti">
@@ -356,7 +355,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <table id="example1" class="table table-bordered table-striped">
+                                        <table class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>

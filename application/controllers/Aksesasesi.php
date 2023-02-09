@@ -93,6 +93,7 @@ class Aksesasesi extends CI_Controller
 				'id_asesi' => $id_asesi
 			);
 			$this->Maksesasesi->addappapl01($dataasesi);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Disimpan</div>');
 			redirect(base_url('aksesasesi/apl01'));
 		} else {
 			$data = array(
@@ -111,6 +112,7 @@ class Aksesasesi extends CI_Controller
 				'tgl_apl' => date('Y-m-d')
 			);
 			$this->Maksesasesi->editapl01($data, $id_asesi);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
 			redirect(base_url('aksesasesi/apl01'));
 		}
 	}
@@ -138,7 +140,7 @@ class Aksesasesi extends CI_Controller
 		$config['encrypt_name'] = TRUE;
 		$this->upload->initialize($config);
 		if (!$this->upload->do_upload('file_bukti')) {
-			$this->session->set_flashdata('alert', '<div class="alert alert-success left-icon-alert" role="alert">' . $this->upload->display_errors() . '</div>');
+			$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert">' . $this->upload->display_errors() . '</div>');
 			redirect(base_url('aksesasesi/apl01'));
 		} else {
 			$file_bukti = $this->upload->data('file_name');

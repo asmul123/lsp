@@ -80,4 +80,10 @@ class Maksesasesi extends CI_Model
         $this->db->where('id_asesi', $id);
         $this->db->update('tb_apl_01', $data);
     }
+
+    function editappapl01($data, $id)
+    {
+        $this->db->where('id_asesi', $id);
+        $this->db->update('tb_approve_apl01', $data);
+    }
 }

@@ -173,6 +173,22 @@
 		'sort': false
 	});
 
+	$('#dataSiswaIndex2').DataTable({
+		"order": [
+			[3, "desc"]
+		],
+		'scrollX': true,
+		'sort': false
+	});
+
+	$('#dataSiswaIndex3').DataTable({
+		"order": [
+			[3, "desc"]
+		],
+		'scrollX': true,
+		'sort': false
+	});
+
 	$('input.blue-style').iCheck({
 		checkboxClass: 'icheckbox_square-blue',
 		radioClass: 'iradio_square-blue'
