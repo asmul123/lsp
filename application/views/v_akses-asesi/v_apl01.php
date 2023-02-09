@@ -306,18 +306,62 @@
                                         <table width="100%">
                                             <tr>
                                                 <td align="left">
-                                                    <h3 class="card-title">Daftar Bukti</h3>
+                                                    <h3 class="card-title">Daftar Persyaratan</h3>
                                                 </td>
-                                                <td align="right"><a href="#"><button class="btn btn-primary"><i class="fa fa-plus"></i> Tambah</button></a></td>
+                                                <td align="right"><a href="#" data-toggle="modal" data-target="#tambahBukti"><button class="btn btn-primary btn-animated btn-wide"><i class="fa fa-plus"></i> Tambah</button></a></td>
 
                                             </tr>
                                         </table>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="tambahBukti" tabindex="-1" role="dialog" aria-labelledby="tambahBukti">
+                                            <form method="post" action="<?= base_url('aksesasesi/add_bukti')  ?>" enctype="multipart/form-data">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="tambahBukti">Upload Persyaratan <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row panel">
+                                                                <div class="panel-body">
+                                                                    <div class="col-md-12">
+                                                                        <i>( * ) Wajib di Isi</i>
+                                                                        <div class="form-group has-feedback">
+                                                                            <label for="name5">Jenis Persyaratan*</label>
+                                                                            <select name="id_bukti" class="form-control">
+                                                                                <?php
+                                                                                $persyaratan = $this->Mapl01->getpersyaratan($data_skema['id']);
+                                                                                foreach ($persyaratan as $ps) : ?>
+                                                                                    <option value="<?= $ps['id'] ?>"><?= $ps['bukti'] ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </select>
+                                                                            <span class="help-block">Pilih Jenis Persyaratan</span>
+                                                                        </div>
+                                                                        <div class="form-group has-feedback">
+                                                                            <label for="exampleInputPassword5">File Persyaratan</label>
+                                                                            <input type="file" class="form-control" name="file_bukti">
+                                                                            <span class="fa fa-file form-control-feedback"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-gray btn-wide btn-rounded" data-dismiss="modal"><i class="fa fa-times"></i>Batal</button>
+                                                                <button type="submit" class="btn bg-success btn-wide btn-rounded"><i class="fa fa-check"></i>Simpan</button>
+                                                            </div>
+                                                            <!-- /.btn-group -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                         <table id="example1" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Jenis Bukti</th>
-                                                    <th>File Bukti</th>
+                                                    <th>Jenis Persyaratan</th>
+                                                    <th>File Persyaratan</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -330,8 +374,8 @@
                                                     <tr>
                                                         <td><?php echo $No . '. '; ?></td>
                                                         <td><?= $hSQL["bukti"] ?></td>
-                                                        <td><a href="file_bukti/<?= $hSQL["file_bukti"] ?>" target="_blank"><i class="nav-icon fas fa-download"></i>Download</a></td>
-                                                        <td><a href="index.php?idx=APL01&aksi=hapus_bukti&id_bukti=<?= $hSQL["id_bukti_asesi"] ?>"><i class="nav-icon fas fa-trash"></i></a> </td>
+                                                        <td><a href="<?= base_url() ?>assets/bukti/<?= $hSQL["file_bukti"] ?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Download</a></td>
+                                                        <td><a href="<?= base_url() ?>aksesasesi/hapusbukti/<?= $hSQL["id_bukti_asesi"] ?>" onclick="return confirm('Yakin untuk menghapus?')" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a></td>
                                                     </tr> <?php
                                                             $No++;
                                                         }

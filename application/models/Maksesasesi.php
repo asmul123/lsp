@@ -45,9 +45,29 @@ class Maksesasesi extends CI_Model
         return $this->db->get()->num_rows();
     }
 
+    function getbuktiasesi($id, $idasesi)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_bukti_asesi');
+        $this->db->where('id_asesi', $idasesi);
+        $this->db->where('id', $id);
+        return $this->db->get();
+    }
+
+    function hapusbukti($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('tb_bukti_asesi');
+    }
+
     function addapl01($data)
     {
         $this->db->insert('tb_apl_01', $data);
+    }
+
+    function addbukti($data)
+    {
+        $this->db->insert('tb_bukti_asesi', $data);
     }
 
     function addappapl01($data)
