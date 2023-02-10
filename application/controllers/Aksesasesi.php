@@ -26,7 +26,9 @@ class Aksesasesi extends CI_Controller
 	{
 		$id = $this->session->userdata('tipeuser');
 		$data['menu'] = $this->M_Setting->getmenu1($id);
-		$data['dataasesi'] = $this->Masesi->getasesi();
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$dataasesi = $this->Masesi->getasesidetail($data['idasesi']);
+		$data['dataapl01'] = $this->Maksesasesi->getApl01Asesi($dataasesi['idas']);
 		$data['activeMenu'] = '';
 
 		$this->load->view('template/header');
@@ -39,8 +41,8 @@ class Aksesasesi extends CI_Controller
 	{
 		$id = $this->session->userdata('tipeuser');
 		$data['menu'] = $this->M_Setting->getmenu1($id);
-		$data['dataasesi'] = $this->Masesi->getasesidetail($this->session->userdata('id_user'));
 		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data['dataasesi'] = $this->Masesi->getasesidetail($data['idasesi']);
 		$data['skema'] = $this->Maksesasesi->getskema($data['idasesi']);
 		if (!$data['skema']) {
 			echo '<script type="text/javascript">';
@@ -53,6 +55,49 @@ class Aksesasesi extends CI_Controller
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $data);
 		$this->load->view('v_akses-asesi/v_apl01', $data);
+		$this->load->view('template/footer');
+	}
+
+	public function form_apl02($idunit)
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data['dataasesi'] = $this->Masesi->getasesidetail($data['idasesi']);
+		$data['skema'] = $this->Maksesasesi->getskema($data['idasesi']);
+		$data['id_unit'] = $idunit;
+		if (!$data['skema']) {
+			echo '<script type="text/javascript">';
+			echo 'alert("Anda belum memiliki Jadwal");';
+			echo 'window.location.href = "' . base_url() . '";';
+			echo '</script>';
+		}
+		$data['activeMenu'] = '';
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_akses-asesi/v_apl02-form', $data);
+		$this->load->view('template/footer');
+	}
+
+	public function apl02()
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data['dataasesi'] = $this->Masesi->getasesidetail($data['idasesi']);
+		$data['skema'] = $this->Maksesasesi->getskema($data['idasesi']);
+		if (!$data['skema']) {
+			echo '<script type="text/javascript">';
+			echo 'alert("Anda belum memiliki Jadwal");';
+			echo 'window.location.href = "' . base_url() . '";';
+			echo '</script>';
+		}
+		$data['activeMenu'] = '';
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_akses-asesi/v_apl02', $data);
 		$this->load->view('template/footer');
 	}
 
@@ -115,6 +160,49 @@ class Aksesasesi extends CI_Controller
 			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
 			redirect(base_url('aksesasesi/apl01'));
 		}
+	}
+
+	public function kom_process()
+	{
+		$add = 0;
+		$update = 0;
+		$gagal = 0;
+		// $datajcek = "";
+		// foreach ($_POST as $key => $value) {
+		// 	echo $key . '=' . $value . '<br>';
+		// }
+		$id_asesi = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$id_unit = $this->input->post('id_unit', true);
+		$padel = $this->db->query("SELECT * from tb_elemen where id_unit='$id_unit' order by urutan asc")->result_array();
+		foreach ($padel as $hadel) {
+			$id_elemen = $hadel['id'];
+			$kom = $this->input->post('kom' . $id_elemen, true);
+			$bukti = $this->input->post('bukti' . $id_elemen, true);
+			$data = array(
+				'id_elemen' => $id_elemen,
+				'id_unit' => $id_unit,
+				'id_asesi' => $id_asesi,
+				'id_bukti' => $bukti,
+				'kompetensi' => $kom
+			);
+			$jcek = $this->db->query("SELECT * from tb_apl_02 where id_elemen='$id_elemen' and id_asesi='$id_asesi'")->num_rows();
+			if ($kom != "" and $bukti != "") {
+				if ($jcek >= 1) {
+					$this->db->where('id_asesi',  $id_asesi);
+					$this->db->where('id_elemen',  $id_elemen);
+					$this->db->update('tb_apl_02', $data);
+					$update++;
+				} else {
+					$this->db->insert('tb_apl_02', $data);
+					$add++;
+				}
+			} else {
+				$gagal++;
+			}
+			// $datajcek = $datajcek . "-" . $jcek;
+		}
+		$this->session->set_flashdata('alert', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Status Data!</strong> Data Ditambahkan : ' . $add . ' data, Diubah : ' . $update . ' data, Gagal : ' . $gagal . ' data.</div>');
+		redirect(base_url('aksesasesi/apl02'));
 	}
 
 	public function add_bukti()

@@ -10,7 +10,7 @@ class Masesi extends CI_Model
 
     function getasesidetail($id)
     {
-        $this->db->select('*');
+        $this->db->select('*, tb_asesi.id as idas');
         $this->db->from('tb_asesi');
         $this->db->join('tb_users', 'tb_asesi.id_user = tb_users.id');
         $this->db->where('tb_asesi.id', $id);

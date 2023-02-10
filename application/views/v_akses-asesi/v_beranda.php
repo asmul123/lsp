@@ -29,7 +29,19 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat bg-info" href="<?php echo base_url('aksesasesi/apl01') ?>">
+                    <?php
+                    if ($dataapl01) {
+                        if ($dataapl01['status'] == 1) {
+                            $status = "bg-warning";
+                        } else if ($dataapl01['status'] == 2) {
+                            $status = "bg-success";
+                        } else {
+                            $status = "bg-danger";
+                        }
+                    } else {
+                        $status = "bg-info";
+                    } ?>
+                    <a class="dashboard-stat <?= $status ?>" href="<?php echo base_url('aksesasesi/apl01') ?>">
                         <span class="number counter">APL-01</span>
                         <span class="name"><strong> Permohonan Sertifikasi</strong></span>
                         <span class="bg-icon"><i class="fa fa-users"></i></span>

@@ -174,7 +174,7 @@
                                                 <label>Tanda Tangan</label>
                                                 <?php if ($HAD and $HAD['status'] == 1 or $HAD['status'] == 2) {
                                                 ?>
-                                                    <img src='data:<?= $HAD['ttd'] ?>' />
+                                                    <img src='data:<?= $HAD['ttd'] ?>' width="100%" />
                                                 <?php
                                                 } else {
                                                 ?>
@@ -275,7 +275,7 @@
                                         <hr>
                                         Daftar Unit Kompetensi sesuai kemasan :
                                         <hr>
-                                        <table id="dataSiswaIndex" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <table class="display table table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
