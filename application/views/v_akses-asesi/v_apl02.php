@@ -19,6 +19,7 @@
                             <div class="card-header p-2">
                                 <?php
                                 $data_skema = $this->Mskema->getskemadetail($skema['id_skema']);
+                                $hcdapl = $this->db->query("SELECT status_ajuan, ttd_asesi, catatan from tb_approve_apl02 where id_asesi='$idasesi'")->row_array();
                                 ?>
                                 <table width="100%" border='1' cellpadding="4" cellspacing="4">
                                     <tr>
@@ -48,6 +49,32 @@
                                         </td>
                                     </tr>
                                 </table>
+                                <?php if ($hcdapl) {
+                                    if ($hcdapl['status_ajuan'] == 1) {
+                                ?>
+                                        <div class="alert alert-warning alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="fa fa-exclamation-triangle"></i> Status Data!</h5>
+                                            Anda telah mengisi Formulir APL-02, dan sedang dilakukan pemeriksaan oleh Asesor Kompetensi!
+                                        </div>
+                                    <?php } else if ($hcdapl['status_ajuan'] == 2) {
+                                    ?>
+                                        <div class="alert alert-success alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="fa fa-check"></i> Status Data!</h5>
+                                            Formulir APL-02 Anda telah diterima, anda dapat melanjutkan ke tahap berikutnya!<br>
+                                            Catatan Asesor: <?= $hcdapl['catatan'] ?>
+                                        </div>
+                                    <?php } else if ($hcdapl['status_ajuan'] == 3) {
+                                    ?>
+                                        <div class="alert alert-danger alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="fa fa-ban"></i> Status Data!</h5>
+                                            Data Anda ditolak, silahkan perbaiki data Anda!<br>
+                                            Catatan Asesor: <?= $hcdapl['catatan'] ?>
+                                        </div>
+                                <?php }
+                                } ?>
                                 Daftar Unit Kompetensi sesuai kemasan :
                                 <br>
                                 <table id="dataSiswaIndex" class="table table-bordered table-striped">
@@ -95,18 +122,18 @@
                                 </table>
                                 <?php
                                 if ($No == $success) {
-                                    $hcdapl = $this->db->query("SELECT status_ajuan, ttd_asesi from tb_approve_apl02 where id_asesi='$idasesi'")->row_array();
-                                    if ($hcdapl['status_ajuan'] == 1 or $hcdapl['status_ajuan'] == 2) {
-                                        $disabled = "disabled";
+                                    if ($hcdapl) {
+                                        if ($hcdapl['status_ajuan'] == 1 or $hcdapl['status_ajuan'] == 2) {
+                                            $disabled = "disabled";
+                                        } else {
+                                            $disabled = "";
+                                        }
                                     } else {
                                         $disabled = "";
                                     }
                                 ?>
 
-                                    <form action="<?= base_url('apl02_proses') ?>" method="POST">
-                                        <input type="checkbox" name="persetujuan" value="Ya" <?php if ($disabled == "disabled") {
-                                                                                                    echo "checked";
-                                                                                                } ?> <?= $disabled ?>> Saya telah memeriksa semua unit kompetensi<br>
+                                    <form action="<?= base_url('aksesasesi/apl02_process') ?>" method="POST">
                                         <div class="form-group">
                                             <label>Tanda Tangan</label>
                                             <?php
@@ -154,6 +181,11 @@
                                                 </div>
                                         </div>
                                     <?php } ?>
+                                    <h5><input class="blue-style" type="checkbox" name="persetujuan" value="Ya" <?php if ($disabled == "disabled") {
+                                                                                                                    echo "checked";
+                                                                                                                } ?> <?= $disabled ?> required>
+                                        Saya telah memeriksa semua unit kompetensi</h5><br>
+
                                     <input type="submit" name="ajukan_apl" class="btn btn-primary" value="Ajukan" <?= $disabled ?>>
                                     </form>
                                 <?php

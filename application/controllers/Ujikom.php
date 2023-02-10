@@ -49,6 +49,20 @@ class Ujikom extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function asman()
+    {
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['idasesor'] = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $data['ujikom'] = $this->Mujikom->getAll();
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl02.php', $data);
+        $this->load->view('template/footer');
+    }
+
     public function proses_pengajuan($idasesi)
     {
         $this->load->view('template/header');
@@ -63,6 +77,23 @@ class Ujikom extends CI_Controller
 
         $this->load->view('template/sidebar', $data);
         $this->load->view('v_ujikom/v_ujikom_apl01-app.php', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function proses_apl02($idasesi)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['dataasesi'] = $this->Masesi->getasesidetail($idasesi);
+        $data['dataapl02'] = $this->Maksesasesi->getApl02Asesi($idasesi);
+        $data['skema'] = $this->Maksesasesi->getskema($idasesi);
+        $data['idasesi'] = $idasesi;
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl02-app.php', $data);
         $this->load->view('template/footer');
     }
 
@@ -90,6 +121,29 @@ class Ujikom extends CI_Controller
             $this->Maksesasesi->editappapl01($data2, $id_asesi);
             $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Pengajuan telah disimpan</div>');
             redirect(base_url('ujikom/proses_pengajuan/' . $id_asesi));
+        }
+    }
+
+    public function apl02_process()
+    {
+        $id_asesi = $this->input->post('id_asesi', true);
+        $catatan = $this->input->post('catatan', true);
+        $status_ajuan = $this->input->post('status_ajuan', true);
+        $ttd = $this->input->post('ttd', false);
+        $jmlapl02 = $this->Maksesasesi->getcountapl02($id_asesi);
+        if ($jmlapl02 == 0) {
+            $this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Asesi Belum membuat Pengajuan</div>');
+            redirect(base_url('ujikom/asman'));
+        } else {
+            $data = array(
+                'status_ajuan' => $status_ajuan,
+                'ttd_asesor' => $ttd,
+                'tgl_terima' => date('Y-m-d'),
+                'catatan' => $catatan
+            );
+            $this->Maksesasesi->editapl02($data, $id_asesi);
+            $this->session->set_flashdata('alert', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Keputusan telah disimpan</div>');
+            redirect(base_url('ujikom/asman'));
         }
     }
 

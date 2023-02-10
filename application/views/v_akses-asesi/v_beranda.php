@@ -50,7 +50,19 @@
                 <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat bg-info" href="<?php echo base_url('aksesasesi/apl02') ?>">
+                    <?php
+                    if ($dataapl02) {
+                        if ($dataapl02['status_ajuan'] == 1) {
+                            $status_ajuan = "bg-warning";
+                        } else if ($dataapl02['status_ajuan'] == 2) {
+                            $status_ajuan = "bg-success";
+                        } else {
+                            $status_ajuan = "bg-danger";
+                        }
+                    } else {
+                        $status_ajuan = "bg-info";
+                    } ?>
+                    <a class="dashboard-stat <?= $status_ajuan ?>" href="<?php echo base_url('aksesasesi/apl02') ?>">
                         <span class="number counter">APL-02</span>
                         <span class="name"><strong>Asesmen Mandiri</strong></span>
                         <span class="bg-icon"><i class="fa fa-users"></i></span>

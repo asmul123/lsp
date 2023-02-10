@@ -29,6 +29,7 @@ class Aksesasesi extends CI_Controller
 		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
 		$dataasesi = $this->Masesi->getasesidetail($data['idasesi']);
 		$data['dataapl01'] = $this->Maksesasesi->getApl01Asesi($dataasesi['idas']);
+		$data['dataapl02'] = $this->Maksesasesi->getApl02Asesi($dataasesi['idas']);
 		$data['activeMenu'] = '';
 
 		$this->load->view('template/header');
@@ -159,6 +160,30 @@ class Aksesasesi extends CI_Controller
 			$this->Maksesasesi->editapl01($data, $id_asesi);
 			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
 			redirect(base_url('aksesasesi/apl01'));
+		}
+	}
+
+	public function apl02_process()
+	{
+
+		$id_asesi = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$ttd = $this->input->post('ttd', false);
+		$jmlapl02 = $this->Maksesasesi->getcountapl02($id_asesi);
+		$data = array(
+			'id_asesi' => $id_asesi,
+			'id_asesor' => $this->Maksesasesi->getasesorasesi($id_asesi),
+			'tgl_ajuan' => date('Y-m-d'),
+			'ttd_asesi' => $ttd,
+			'status_ajuan' => '1'
+		);
+		if ($jmlapl02 == 0) {
+			$this->Maksesasesi->addapl02($data);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Disimpan</div>');
+			redirect(base_url('aksesasesi/apl02'));
+		} else {
+			$this->Maksesasesi->editapl02($data, $id_asesi);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
+			redirect(base_url('aksesasesi/apl02'));
 		}
 	}
 
