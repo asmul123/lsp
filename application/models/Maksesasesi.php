@@ -28,6 +28,14 @@ class Maksesasesi extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    function getAk01Asesi($id)
+    {
+        $this->db->select('*');
+        $this->db->from('fr_ak_01');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->row_array();
+    }
+
     function getskema($id)
     {
         $this->db->select('*, tb_sertifikasi.id as idser');
@@ -46,6 +54,15 @@ class Maksesasesi extends CI_Model
         return $this->db->get()->num_rows();
     }
 
+    function getjadwalasesi($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_sertifikasi');
+        $this->db->join('tb_paket', 'tb_sertifikasi.id_paket=tb_paket.id');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->row_array();
+    }
+
     function getcountapl01($id)
     {
         $this->db->select('id');
@@ -58,6 +75,22 @@ class Maksesasesi extends CI_Model
     {
         $this->db->select('id');
         $this->db->from('tb_approve_apl02');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->num_rows();
+    }
+
+    function getcountak01($id)
+    {
+        $this->db->select('id');
+        $this->db->from('fr_ak_01');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->num_rows();
+    }
+
+    function getcountak02($id)
+    {
+        $this->db->select('id');
+        $this->db->from('fr_ak_02');
         $this->db->where('id_asesi', $id);
         return $this->db->get()->num_rows();
     }
@@ -95,6 +128,11 @@ class Maksesasesi extends CI_Model
         $this->db->insert('tb_approve_apl02', $data);
     }
 
+    function addak01($data)
+    {
+        $this->db->insert('fr_ak_01', $data);
+    }
+
     function addbukti($data)
     {
         $this->db->insert('tb_bukti_asesi', $data);
@@ -121,5 +159,11 @@ class Maksesasesi extends CI_Model
     {
         $this->db->where('id_asesi', $id);
         $this->db->update('tb_approve_apl02', $data);
+    }
+
+    function editak01($data, $id)
+    {
+        $this->db->where('id_asesi', $id);
+        $this->db->update('fr_ak_01', $data);
     }
 }

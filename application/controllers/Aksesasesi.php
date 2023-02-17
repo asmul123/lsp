@@ -15,10 +15,14 @@ class Aksesasesi extends CI_Controller
 		$this->load->model('M_Setting');
 		$this->load->model('Masesi');
 		$this->load->model('Mskema');
+		$this->load->model('Masesor');
 		$this->load->model('Maksesasesi');
 		$this->load->model('Mapl01');
+		$this->load->model('Mak01');
+		$this->load->model('Mtuk');
 		$this->load->model('Mtahunaktif');
 		$this->load->model('M_Akses');
+		$this->load->helper('tgl_indo');
 		cek_login_user();
 	}
 
@@ -30,6 +34,7 @@ class Aksesasesi extends CI_Controller
 		$dataasesi = $this->Masesi->getasesidetail($data['idasesi']);
 		$data['dataapl01'] = $this->Maksesasesi->getApl01Asesi($dataasesi['idas']);
 		$data['dataapl02'] = $this->Maksesasesi->getApl02Asesi($dataasesi['idas']);
+		$data['dataak01'] = $this->Maksesasesi->getAk01Asesi($dataasesi['idas']);
 		$data['activeMenu'] = '';
 
 		$this->load->view('template/header');
@@ -59,6 +64,29 @@ class Aksesasesi extends CI_Controller
 		$this->load->view('template/footer');
 	}
 
+	public function ak01()
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data['dataasesi'] = $this->Masesi->getasesidetail($data['idasesi']);
+		$data['skema'] = $this->Maksesasesi->getskema($data['idasesi']);
+		$data['jadwal'] = $this->Maksesasesi->getjadwalasesi($data['idasesi']);
+		$data['dataak01'] = $this->Mak01->getak01($data['skema']['id_skema']);
+		if (!$data['skema']) {
+			echo '<script type="text/javascript">';
+			echo 'alert("Anda belum memiliki Jadwal");';
+			echo 'window.location.href = "' . base_url() . '";';
+			echo '</script>';
+		}
+		$data['activeMenu'] = '';
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_akses-asesi/v_ak01', $data);
+		$this->load->view('template/footer');
+	}
+
 	public function form_apl02($idunit)
 	{
 		$id = $this->session->userdata('tipeuser');
@@ -78,6 +106,33 @@ class Aksesasesi extends CI_Controller
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar', $data);
 		$this->load->view('v_akses-asesi/v_apl02-form', $data);
+		$this->load->view('template/footer');
+	}
+
+	public function ak04()
+	{
+		$id = $this->session->userdata('tipeuser');
+		$data['menu'] = $this->M_Setting->getmenu1($id);
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data['dataasesi'] = $this->Masesi->getasesidetail($data['idasesi']);
+		$data['skema'] = $this->Maksesasesi->getskema($data['idasesi']);
+		$jak02 = $this->Maksesasesi->getcountak02($data['idasesi']);
+		if (!$data['skema']) {
+			echo '<script type="text/javascript">';
+			echo 'alert("Anda belum memiliki Jadwal");';
+			echo 'window.location.href = "' . base_url() . '";';
+			echo '</script>';
+		} else if ($jak02 == 0) {
+			echo '<script type="text/javascript">';
+			echo 'alert("Formulir Banding dapat diisi apabila sudah ada putusan");';
+			echo 'window.location.href = "' . base_url() . '";';
+			echo '</script>';
+		}
+		$data['activeMenu'] = '';
+
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar', $data);
+		$this->load->view('v_akses-asesi/v_ak04', $data);
 		$this->load->view('template/footer');
 	}
 
@@ -184,6 +239,29 @@ class Aksesasesi extends CI_Controller
 			$this->Maksesasesi->editapl02($data, $id_asesi);
 			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
 			redirect(base_url('aksesasesi/apl02'));
+		}
+	}
+
+	public function ak01_process()
+	{
+
+		$id_asesi = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$ttd = $this->input->post('ttd', false);
+		$jmlak01 = $this->Maksesasesi->getcountak01($id_asesi);
+		$data = array(
+			'id_asesi' => $id_asesi,
+			'id_asesor' => $this->Maksesasesi->getasesorasesi($id_asesi),
+			'tgl_ttd_asesi' => date('Y-m-d'),
+			'ttd_asesi' => $ttd
+		);
+		if ($jmlak01 == 0) {
+			$this->Maksesasesi->addak01($data);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Disimpan</div>');
+			redirect(base_url('aksesasesi/ak01'));
+		} else {
+			$this->Maksesasesi->editak01($data, $id_asesi);
+			$this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
+			redirect(base_url('aksesasesi/ak01'));
 		}
 	}
 

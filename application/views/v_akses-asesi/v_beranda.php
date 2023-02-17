@@ -71,7 +71,19 @@
                 <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat bg-info" href="<?php echo base_url('aksesasesi/ak01') ?>">
+                    <?php
+                    if ($dataak01) {
+                        if ($dataak01['ttd_asesor'] != "") {
+                            $status_ajuan = "bg-success";
+                        } else if ($dataak01['ttd_asesi'] != "") {
+                            $status_ajuan = "bg-warning";
+                        } else {
+                            $status_ajuan = "bg-danger";
+                        }
+                    } else {
+                        $status_ajuan = "bg-info";
+                    } ?>
+                    <a class="dashboard-stat <?= $status_ajuan ?>" href="<?php echo base_url('aksesasesi/ak01') ?>">
                         <span class="number counter">AK-01</span>
                         <span class="name"><strong>Asesmen dan Kerahasiaan</strong></span>
                         <span class="bg-icon"><i class="fa fa-list"></i></span>

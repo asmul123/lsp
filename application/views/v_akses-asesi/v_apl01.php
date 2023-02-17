@@ -172,12 +172,14 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Tanda Tangan</label>
-                                                <?php if ($HAD and $HAD['status'] == 1 or $HAD['status'] == 2) {
+                                                <?php if ($HAD) {
+                                                    if ($HAD['status'] == 1 or $HAD['status'] == 2) {
                                                 ?>
-                                                    <img src='data:<?= $HAD['ttd'] ?>' width="100%" />
-                                                <?php
+                                                        <img src='data:<?= $HAD['ttd'] ?>' width="100%" />
+                                                    <?php
+                                                    }
                                                 } else {
-                                                ?>
+                                                    ?>
                                                     <div class="card-body">
                                                         <!-- canvas tanda tangan  -->
                                                         <canvas id="signature-pad" class="signature-pad"></canvas>
@@ -214,7 +216,8 @@
                                                         <!-- Preview image -->
                                                         <img src='' id='sign_prev' style='display: none;' />
                                                     </div>
-                                                <?php } ?>
+                                                <?php }
+                                                ?>
                                             </div>
                                             <div class="form-group">
                                                 <label>Persetujuan</label>
