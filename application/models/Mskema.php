@@ -156,6 +156,15 @@ class Mskema extends CI_Model
         return $query = $this->db->get_where('tb_kuk', ['id_elemen' => $id])->num_rows();
     }
 
+    function cekKUKUnit($id)
+    {
+        $this->db->select('tb_kuk.id');
+        $this->db->from('tb_kuk');
+        $this->db->join('tb_elemen', 'tb_elemen.id=tb_kuk.id_elemen');
+        $this->db->where('id_unit', $id);
+        return $this->db->get()->num_rows();
+    }
+
     function getkategoridokumen()
     {
         return $this->db->query("SELECT * FROM tb_kategori_dokumen")->result();

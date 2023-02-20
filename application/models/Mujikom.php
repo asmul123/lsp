@@ -32,7 +32,7 @@ class Mujikom extends CI_Model
 
     function getDetail($id)
     {
-        $query = $this->db->query("SELECT *,tb_paket.id as idpak FROM tb_paket left join tb_skema on (tb_paket.id_skema=tb_skema.id) right join tb_tuk on (tb_paket.id_tuk = tb_tuk.id) where tb_paket.id='$id'");
+        $query = $this->db->query("SELECT *,tb_paket.id as idpak, tb_skema.id as idskema FROM tb_paket left join tb_skema on (tb_paket.id_skema=tb_skema.id) right join tb_tuk on (tb_paket.id_tuk = tb_tuk.id) where tb_paket.id='$id'");
         return $query->row_array();
     }
 

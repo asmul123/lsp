@@ -54,6 +54,14 @@ class Maksesasesi extends CI_Model
         return $this->db->get()->num_rows();
     }
 
+    function getpaket($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_sertifikasi');
+        $this->db->where('id_asesi', $id);
+        return $this->db->get()->row_array();
+    }
+
     function getjadwalasesi($id)
     {
         $this->db->select('*');
