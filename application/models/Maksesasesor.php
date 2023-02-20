@@ -33,6 +33,46 @@ class Maksesasesor extends CI_Model
         return $query->num_rows();
     }
 
+    function getCountUnitIa03($idas, $idunit, $kom)
+    {
+        $this->db->select('id');
+        $this->db->where('id_asesi', $idas);
+        $this->db->where('id_unit', $idunit);
+        $this->db->where('kompetensi', $kom);
+        $query = $this->db->get('fr_ia_03');
+        return $query->num_rows();
+    }
+
+    function getCountUnitIa05($idas, $idunit, $kom)
+    {
+        $this->db->select('id');
+        $this->db->where('id_asesi', $idas);
+        $this->db->where('id_unit', $idunit);
+        $this->db->where('kompetensi', $kom);
+        $query = $this->db->get('fr_ia_05');
+        return $query->num_rows();
+    }
+
+    function getCountUnitIa06($idas, $idunit, $kom)
+    {
+        $this->db->select('id');
+        $this->db->where('id_asesi', $idas);
+        $this->db->where('id_unit', $idunit);
+        $this->db->where('kompetensi', $kom);
+        $query = $this->db->get('fr_ia_06');
+        return $query->num_rows();
+    }
+
+    function getCountUnitIa07($idas, $idunit, $kom)
+    {
+        $this->db->select('id');
+        $this->db->where('id_asesi', $idas);
+        $this->db->where('id_unit', $idunit);
+        $this->db->where('kompetensi', $kom);
+        $query = $this->db->get('fr_ia_07');
+        return $query->num_rows();
+    }
+
     function getCountIa03($id)
     {
         $this->db->select('id');
@@ -61,6 +101,38 @@ class Maksesasesor extends CI_Model
     {
         $this->db->select('id');
         $this->db->where('id_skema', $id);
+        $query = $this->db->get('tb_ia_07');
+        return $query->num_rows();
+    }
+
+    function getCountIa03Unit($id)
+    {
+        $this->db->select('id');
+        $this->db->where('id_unit', $id);
+        $query = $this->db->get('tb_ia_03');
+        return $query->num_rows();
+    }
+
+    function getCountIa05Unit($id)
+    {
+        $this->db->select('id');
+        $this->db->where('id_unit', $id);
+        $query = $this->db->get('tb_ia_05');
+        return $query->num_rows();
+    }
+
+    function getCountIa06Unit($id)
+    {
+        $this->db->select('id');
+        $this->db->where('id_unit', $id);
+        $query = $this->db->get('tb_ia_06');
+        return $query->num_rows();
+    }
+
+    function getCountIa07Unit($id)
+    {
+        $this->db->select('id');
+        $this->db->where('id_unit', $id);
         $query = $this->db->get('tb_ia_07');
         return $query->num_rows();
     }
@@ -155,6 +227,14 @@ class Maksesasesor extends CI_Model
         return $query->row_array();
     }
 
+    function getAk02($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id_asesi', $id);
+        $query = $this->db->get('fr_ak_02');
+        return $query->row_array();
+    }
+
     function getCountKompIa05($kom, $idas)
     {
         $this->db->select('id');
@@ -240,5 +320,16 @@ class Maksesasesor extends CI_Model
         $this->db->where('id_ia', $id);
         $this->db->where('id_asesi', $idasesi);
         $this->db->update('fr_ia_07', $data);
+    }
+
+    function addfrak02($data)
+    {
+        $this->db->insert('fr_ak_02', $data);
+    }
+
+    function editfrak02($data, $idasesi)
+    {
+        $this->db->where('id_asesi', $idasesi);
+        $this->db->update('fr_ak_02', $data);
     }
 }

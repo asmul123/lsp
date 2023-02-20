@@ -42,6 +42,24 @@ class Aksesasesor extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function proses($idasesi)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $idasesor = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['dataasesi'] = $this->Masesi->getasesidetail($idasesi);
+        $data['dataak02'] = $this->Maksesasesor->getAk02($idasesi);
+        $dataserti = $this->Maksesasesi->getpaket($idasesi);
+        $data['ujikomdetail'] = $this->Mujikom->getDetail($dataserti['id_paket']);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_aksesasesor/v_putusan.php', $data);
+        $this->load->view('template/footer');
+    }
+
     public function daftar_asesi($idpaket)
     {
         $this->load->view('template/header');
@@ -215,6 +233,52 @@ class Aksesasesor extends CI_Controller
             alert('$Pesan');
             document.location.href = '" . base_url('aksesasesor/fria01/' . $id_asesi) . "';
         </script>";
+    }
+
+    public function ak02_process()
+    {
+        $id_asesor = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $id_asesi = $this->input->post('id_asesi', true);
+        $catatan = $this->input->post('catatan', true);
+        $tindakan = $this->input->post('tindakan', true);
+        $kompetensi = $this->input->post('kompetensi', true);
+        $ttd_asesor = $this->input->post('ttd', true);
+        $id_asesi = $this->input->post('id_asesi', true);
+        $dataserti = $this->Maksesasesi->getpaket($id_asesi);
+        $pcdia = $this->db->query("SELECT * FROM fr_ak_02 where id_asesi='" . $id_asesi . "'");
+        $jcdia = $pcdia->num_rows();
+        if ($jcdia >= 1) {
+            $data = array(
+                'id_asesor' => $id_asesor,
+                'catatan' => $catatan,
+                'tindakan' => $tindakan,
+                'kompetensi' => $kompetensi,
+                'ttd_asesor' => $ttd_asesor,
+                'tgl_putusan' => date('Y-m-d')
+            );
+            $this->Maksesasesor->editfrak02($data, $id_asesi);
+            echo "
+                    <script>
+                        alert('Berhasil Mengubah data Putusan');
+                        document.location.href = '" . base_url('aksesasesor/daftar_asesi/' . $dataserti['id_paket']) . "';
+                    </script>";
+        } else {
+            $data = array(
+                'id_asesi' => $id_asesi,
+                'id_asesor' => $id_asesor,
+                'catatan' => $catatan,
+                'tindakan' => $tindakan,
+                'kompetensi' => $kompetensi,
+                'ttd_asesor' => $ttd_asesor,
+                'tgl_putusan' => date('Y-m-d')
+            );
+            $this->Maksesasesor->addfrak02($data);
+            echo "
+                    <script>
+                        alert('Berhasil Menyimpan data Putusan');
+                        document.location.href = '" . base_url('aksesasesor/daftar_asesi/' . $dataserti['id_paket']) . "';
+                    </script>";
+        }
     }
 
     public function ia03save()
