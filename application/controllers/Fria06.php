@@ -97,8 +97,8 @@ class Fria06 extends CI_Controller
 		$id_ia06 = $this->input->post('id_ia06', true);
 		$id_skema = $this->input->post('id_skema', true);
 		$id_unit = $this->input->post('id_unit', true);
-		$pertanyaan = $this->input->post('pertanyaan', true);
-		$jawaban = $this->input->post('jawaban', true);
+		$pertanyaan = $this->input->post('pertanyaan', false);
+		$jawaban = $this->input->post('jawaban', false);
 		if ($id_ia06 == "") {
 			$data = array(
 				'id_skema' => $id_skema,

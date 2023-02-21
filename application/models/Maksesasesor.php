@@ -23,6 +23,15 @@ class Maksesasesor extends CI_Model
         return $query->result_array();
     }
 
+    function getTest($id)
+    {
+        $this->db->select('*');
+        $this->db->join('tb_jenis_test', 'tb_jenis_test.id_jenis = tb_daftar_test.id_jenis');
+        $this->db->where('id_paket', $id);
+        $query = $this->db->get('tb_daftar_test');
+        return $query->result_array();
+    }
+
     function getCountUnitIa01($idas, $idunit, $kom)
     {
         $this->db->select('id');

@@ -113,10 +113,10 @@ class Fria05 extends CI_Controller
 		$id_skema = $this->input->post('id_skema', true);
 		$id_unit = $this->input->post('id_unit', true);
 		$kunci = $this->input->post('kunci', true);
-		$pertanyaan = $this->input->post('pertanyaan', true);
+		$pertanyaan = $this->input->post('pertanyaan', false);
 		$jawaban = "#";
 		for ($i = 1; $i <= 6; $i++) {
-			$jawaban = $jawaban . $i . "_" . $this->input->post('jawaban' . $i) . "#";
+			$jawaban = $jawaban . $i . "_" . $this->input->post('jawaban' . $i, false) . "#";
 		}
 		if ($id_ia05 == "") {
 			$data = array(
@@ -151,7 +151,7 @@ class Fria05 extends CI_Controller
 		$id = $this->input->post('id', true);
 		$id_skema = $this->input->post('id_skema', true);
 		$id_unit = $this->input->post('id_unit', true);
-		$pertanyaan = $this->input->post('pertanyaan', true);
+		$pertanyaan = $this->input->post('pertanyaan', false);
 		$data = array(
 			'id_unit' => $id_unit,
 			'pertanyaan' => $pertanyaan

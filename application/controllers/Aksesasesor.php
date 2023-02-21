@@ -76,6 +76,22 @@ class Aksesasesor extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function daftar_test($idpaket)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $idasesor = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['ujikomdetail'] = $this->Mujikom->getDetail($idpaket);
+        $data['daftartest'] = $this->Maksesasesor->getTest($idpaket);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_aksesasesor/v_daftar_test.php', $data);
+        $this->load->view('template/footer');
+    }
+
     public function fria01($idasesi)
     {
         $this->load->view('template/header');

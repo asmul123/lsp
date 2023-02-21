@@ -103,9 +103,9 @@ class Fria02 extends CI_Controller
 		for ($i = 0; $i < $count; $i++) {
 			$du = $du . "#" . $daftar_unit[$i];
 		}
-		$petunjuk = $this->input->post('petunjuk', true);
-		$sekenario = $this->input->post('sekenario', true);
-		$langkah_kerja = $this->input->post('langkah_kerja', true);
+		$petunjuk = $this->input->post('petunjuk', false);
+		$sekenario = $this->input->post('sekenario', false);
+		$langkah_kerja = $this->input->post('langkah_kerja', false);
 
 		$data = array(
 			'id_skema' => $idskema,
@@ -135,9 +135,9 @@ class Fria02 extends CI_Controller
 		for ($i = 0; $i < $count; $i++) {
 			$du = $du . "#" . $daftar_unit[$i];
 		}
-		$petunjuk = $this->input->post('petunjuk', true);
-		$sekenario = $this->input->post('sekenario', true);
-		$langkah_kerja = $this->input->post('langkah_kerja', true);
+		$petunjuk = $this->input->post('petunjuk', false);
+		$sekenario = $this->input->post('sekenario', false);
+		$langkah_kerja = $this->input->post('langkah_kerja', false);
 
 		$data = array(
 			'judul_tugas' => $judul_tugas,

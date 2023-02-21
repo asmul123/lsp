@@ -96,7 +96,7 @@ class Fria03 extends CI_Controller
 	{
 		$id_skema = $this->input->post('id_skema', true);
 		$id_unit = $this->input->post('id_unit', true);
-		$pertanyaan = $this->input->post('pertanyaan', true);
+		$pertanyaan = $this->input->post('pertanyaan', false);
 		$data = array(
 			'id_skema' => $id_skema,
 			'id_unit' => $id_unit,
@@ -114,7 +114,7 @@ class Fria03 extends CI_Controller
 		$id = $this->input->post('id', true);
 		$id_skema = $this->input->post('id_skema', true);
 		$id_unit = $this->input->post('id_unit', true);
-		$pertanyaan = $this->input->post('pertanyaan', true);
+		$pertanyaan = $this->input->post('pertanyaan', false);
 		$data = array(
 			'id_unit' => $id_unit,
 			'pertanyaan' => $pertanyaan

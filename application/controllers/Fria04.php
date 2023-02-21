@@ -79,8 +79,8 @@ class Fria04 extends CI_Controller
 	public function add_process()
 	{
 		$idskema = $this->input->post('idskema', true);
-		$hasil = $this->input->post('hasil', true);
-		$demonstrasi = $this->input->post('demonstrasi', true);
+		$hasil = $this->input->post('hasil', false);
+		$demonstrasi = $this->input->post('demonstrasi', false);
 		$daftar_unit = $this->input->post('daftar_unit');
 		$count = count($daftar_unit);
 		$du = "";
@@ -104,8 +104,8 @@ class Fria04 extends CI_Controller
 	{
 		$id = $this->input->post('id', true);
 		$idskema = $this->input->post('idskema', true);
-		$hasil = $this->input->post('hasil', true);
-		$demonstrasi = $this->input->post('demonstrasi', true);
+		$hasil = $this->input->post('hasil', false);
+		$demonstrasi = $this->input->post('demonstrasi', false);
 		$daftar_unit = $this->input->post('daftar_unit');
 		$count = count($daftar_unit);
 		$du = "";
