@@ -24,7 +24,7 @@ class Kopsurat extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Kop Surat'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_kopsurat/v_kopsurat.php', $data);
+        $this->load->view('v_kopsurat/v_kopsurat', $data);
         $this->load->view('template/footer');
     }
 
@@ -36,7 +36,7 @@ class Kopsurat extends CI_Controller
         $data['kopsurat'] = $this->M_Setting->getkop();
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Kop Surat'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_kopsurat/v_kopsurat-edit.php', $data);
+        $this->load->view('v_kopsurat/v_kopsurat-edit', $data);
         $this->load->view('template/footer');
     }
 

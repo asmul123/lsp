@@ -45,6 +45,15 @@ class Maksesasesi extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    function getTest($id)
+    {
+        $this->db->select('*');
+        $this->db->join('tb_jenis_test', 'tb_jenis_test.id_jenis = tb_daftar_test.id_jenis');
+        $this->db->where('id_paket', $id);
+        $query = $this->db->get('tb_daftar_test');
+        return $query->result_array();
+    }
+
     function getjadwal($id)
     {
         $this->db->select('tb_sertifikasi.id');
@@ -120,10 +129,63 @@ class Maksesasesi extends CI_Model
         return $this->db->get();
     }
 
+    function gettestasesi($idasesi, $id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_status_test');
+        $this->db->where('id_asesi', $idasesi);
+        $this->db->where('id_test', $id);
+        return $this->db->get();
+    }
+
+    function gettestdet($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_daftar_test');
+        $this->db->join('tb_jenis_test', 'tb_jenis_test.id_jenis=tb_daftar_test.id_jenis');
+        $this->db->where('id', $id);
+        return $this->db->get();
+    }
+
+    function getsoalpg($id, $rand = null)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_ia_05');
+        $this->db->where('id_skema', $id);
+        if ($rand != null) {
+            $this->db->order_by('id', 'RANDOM');
+        }
+        return $this->db->get()->result();
+    }
+
+    function cekjawabanpg($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_ia_05');
+        $this->db->where('id', $id);
+        return $this->db->get()->row()->kunci;
+    }
+
+    function getsoalessay($id, $rand = null)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_ia_06');
+        $this->db->where('id_skema', $id);
+        if ($rand != null) {
+            $this->db->order_by('id', 'RANDOM');
+        }
+        return $this->db->get()->result();
+    }
+
     function hapusbukti($id)
     {
         $this->db->where('id', $id);
         $this->db->delete('tb_bukti_asesi');
+    }
+
+    function addasesitest($data)
+    {
+        $this->db->insert('tb_status_test', $data);
     }
 
     function addapl01($data)
@@ -173,5 +235,10 @@ class Maksesasesi extends CI_Model
     {
         $this->db->where('id_asesi', $id);
         $this->db->update('fr_ak_01', $data);
+    }
+
+    function addTest($data)
+    {
+        $this->db->insert('tb_status_test', $data);
     }
 }

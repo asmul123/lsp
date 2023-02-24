@@ -88,6 +88,7 @@
                                             <th class="text-center">C</th>
                                             <th class="text-center">D</th>
                                             <th class="text-center">E</th>
+                                            <th class="text-center">KUNCI</th>
                                             <th class="text-center">K</th>
                                             <th class="text-center">BK</th>
                                         </tr>
@@ -97,6 +98,18 @@
                                         $No     = 1;
                                         foreach ($datafria05 as $data) {
                                             $dataia = $this->Maksesasesor->getRefIa05($data->id, $dataasesi['idas']);
+                                            $kunci = $this->db->get_where('tb_ia_05',  array('id' => $dataia['id_ia']))->row()->kunci;
+                                            if ($kunci == 1) {
+                                                $kunci = "A";
+                                            } elseif ($kunci == 2) {
+                                                $kunci = "B";
+                                            } elseif ($kunci == 3) {
+                                                $kunci = "C";
+                                            } elseif ($kunci == 4) {
+                                                $kunci = "D";
+                                            } elseif ($kunci == 5) {
+                                                $kunci = "E";
+                                            }
                                         ?>
                                             <tr>
                                                 <td width="6%" align="center"><?= $No ?>.</td>
@@ -125,6 +138,7 @@
                                                                                                                                                             echo "checked";
                                                                                                                                                         }
                                                                                                                                                     } ?>></td>
+                                                <td align="center"><?= $kunci ?></td>
                                                 <td align="center"><input type="radio" class="blue-style" name="kom<?= $data->id ?>" value="K" <?php if ($dataia) {
                                                                                                                                                     if ($dataia['kompetensi'] == "K") {
                                                                                                                                                         echo "checked";

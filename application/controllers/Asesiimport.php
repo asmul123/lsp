@@ -67,7 +67,7 @@ class Asesiimport extends CI_Controller
 				$gagal = 0;
 				$berhasil = 0;
 				if (intval($sheetRows) >= 3) {
-					for ($i = 3; $i < count($sheetData); $i++) {
+					for ($i = 2; $i < count($sheetData); $i++) {
 						$cekNopes = $this->Masesi->cekNopes($sheetData[$i][0]);
 						$cekUsername = $this->Masesi->cekUsername($sheetData[$i][2]);
 						if ($cekNopes == 'kosong') {

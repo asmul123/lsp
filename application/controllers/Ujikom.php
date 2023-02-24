@@ -31,7 +31,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom.php', $data);
+        $this->load->view('v_ujikom/v_ujikom', $data);
         $this->load->view('template/footer');
     }
 
@@ -45,7 +45,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_apl01.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl01', $data);
         $this->load->view('template/footer');
     }
 
@@ -59,7 +59,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
         $this->load->view('template/header');
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_apl02.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl02', $data);
         $this->load->view('template/footer');
     }
 
@@ -76,7 +76,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_apl01-app.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl01-app', $data);
         $this->load->view('template/footer');
     }
 
@@ -93,7 +93,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_apl02-app.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_apl02-app', $data);
         $this->load->view('template/footer');
     }
 
@@ -158,7 +158,7 @@ class Ujikom extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_partisipan.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_partisipan', $data);
         $this->load->view('template/footer');
     }
 
@@ -187,7 +187,7 @@ class Ujikom extends CI_Controller
         $data['menu'] = $this->M_Setting->getmenu1($id);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_form.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_form', $data);
         $this->load->view('template/footer');
     }
 
@@ -204,7 +204,7 @@ class Ujikom extends CI_Controller
         $data['menu'] = $this->M_Setting->getmenu1($id);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_ujikom/v_ujikom_rekam.php', $data);
+        $this->load->view('v_ujikom/v_ujikom_rekam', $data);
         $this->load->view('template/footer');
     }
 

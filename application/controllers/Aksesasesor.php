@@ -18,6 +18,7 @@ class Aksesasesor extends CI_Controller
         $this->load->model('Maksesasesor');
         $this->load->model('Maksesasesi');
         $this->load->model('Mmapa01');
+        $this->load->model('Mfria02');
         $this->load->model('Mfria03');
         $this->load->model('Mfria05');
         $this->load->model('Mfria06');
@@ -38,7 +39,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_aksesasesor.php', $data);
+        $this->load->view('v_aksesasesor/v_aksesasesor', $data);
         $this->load->view('template/footer');
     }
 
@@ -56,7 +57,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_putusan.php', $data);
+        $this->load->view('v_aksesasesor/v_putusan', $data);
         $this->load->view('template/footer');
     }
 
@@ -72,7 +73,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_daftar_asesi.php', $data);
+        $this->load->view('v_aksesasesor/v_daftar_asesi', $data);
         $this->load->view('template/footer');
     }
 
@@ -80,7 +81,6 @@ class Aksesasesor extends CI_Controller
     {
         $this->load->view('template/header');
         $id = $this->session->userdata('tipeuser');
-        $idasesor = $this->Masesor->getidasesor($this->session->userdata('id_user'));
         $data['menu'] = $this->M_Setting->getmenu1($id);
         $data['ujikomdetail'] = $this->Mujikom->getDetail($idpaket);
         $data['daftartest'] = $this->Maksesasesor->getTest($idpaket);
@@ -88,8 +88,102 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_daftar_test.php', $data);
+        $this->load->view('v_aksesasesor/v_daftar_test', $data);
         $this->load->view('template/footer');
+    }
+
+    public function list_test($idtest)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $cektoken = $this->Maksesasesor->getTestDetail($idtest)['token'];
+        if ($cektoken == "") {
+            $token = substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(6 / strlen($x)))), 1, 6);
+            $data = array(
+                'token' => $token
+            );
+            $this->Maksesasesor->releasetoken($data, $idtest);
+        } else {
+            $data['token'] = $cektoken;
+        }
+        $idasesor = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $data['datatest'] = $this->Maksesasesor->getTestDetail($idtest);
+        $idpaket = $this->Maksesasesor->getTestDetail($idtest)['id_paket'];
+        $data['ujikomdetail'] = $this->Mujikom->getDetail($idpaket);
+        $data['idtest'] = $idtest;
+        $data['daftarasesi'] = $this->Maksesasesor->getAsesi($idpaket, $idasesor);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_aksesasesor/v_daftar_test-detail', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function release_token($idtest)
+    {
+        $token = substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(6 / strlen($x)))), 1, 6);
+        $data = array(
+            'token' => $token
+        );
+        $this->Maksesasesor->releasetoken($data, $idtest);
+        redirect(base_url('aksesasesor/list_test/' . $idtest));
+    }
+
+    public function tambah_test()
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['jenis_test'] = $this->input->post('jenis_test', true);
+        $data['id_paket'] = $this->input->post('id_paket', true);
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['ujikomdetail'] = $this->Mujikom->getDetail($data['id_paket']);
+        $data['daftartest'] = $this->Maksesasesor->getTest($data['id_paket']);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_aksesasesor/v_daftar_test-form', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function prosestest()
+    {
+
+        $id_jenis = $this->input->post('id_jenis');
+        $id_paket = $this->input->post('id_paket');
+        $durasi = $this->input->post('durasi');
+        $random_soal = $this->input->post('random_soal');
+        $random_jawaban = $this->input->post('random_jawaban');
+        $upload_file = $this->input->post('upload_file');
+        $link_file = $this->input->post('link_file');
+        $max_file = $this->input->post('max_file');
+        $start_at = $this->input->post('date_start_at') . " " . $this->input->post('time_start_at');
+        $finish_at = $this->input->post('date_finish_at') . " " . $this->input->post('time_finish_at');
+        $so = $this->input->post('soal_observasi');
+        $count = count($so);
+        $soal_observasi = "";
+        for ($i = 0; $i < $count; $i++) {
+            $soal_observasi = $soal_observasi . "#" . $so[$i];
+        }
+        $data = [
+            'id_paket' => $id_paket,
+            'durasi' => $durasi,
+            'random_soal' => $random_soal,
+            'random_jawaban' => $random_jawaban,
+            'upload_file' => $upload_file,
+            'link_file' => $link_file,
+            'max_file' => $max_file,
+            'start_at' => $start_at,
+            'finish_at' => $finish_at,
+            'soal_observasi' => $soal_observasi,
+            'id_jenis' => $id_jenis,
+            'id_paket' => $id_paket
+        ];
+        $this->Maksesasesor->addtest($data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil ditambahhkan</div>');
+        redirect(base_url('aksesasesor/daftar_test/' . $id_paket));
     }
 
     public function fria01($idasesi)
@@ -107,7 +201,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria01.php', $data);
+        $this->load->view('v_aksesasesor/v_fria01', $data);
         $this->load->view('template/footer');
     }
 
@@ -127,7 +221,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria03.php', $data);
+        $this->load->view('v_aksesasesor/v_fria03', $data);
         $this->load->view('template/footer');
     }
 
@@ -147,7 +241,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria06.php', $data);
+        $this->load->view('v_aksesasesor/v_fria06', $data);
         $this->load->view('template/footer');
     }
 
@@ -167,7 +261,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria07.php', $data);
+        $this->load->view('v_aksesasesor/v_fria07', $data);
         $this->load->view('template/footer');
     }
 
@@ -187,7 +281,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria05.php', $data);
+        $this->load->view('v_aksesasesor/v_fria05', $data);
         $this->load->view('template/footer');
     }
 
@@ -206,7 +300,7 @@ class Aksesasesor extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_aksesasesor/v_fria01-form.php', $data);
+        $this->load->view('v_aksesasesor/v_fria01-form', $data);
         $this->load->view('template/footer');
     }
 
@@ -215,7 +309,8 @@ class Aksesasesor extends CI_Controller
         $add = 0;
         $update = 0;
         $id_unit = $this->input->post('id_unit', true);
-        $id_asesi = $this->input->post('id_asesi', true);
+        $durasi = $thdurasi;
+        $durasi = $thdurasi;
         $pcdunit = $this->db->query("SELECT tb_kuk.id as id_kuk FROM tb_kuk left join tb_elemen on (tb_kuk.id_elemen=tb_elemen.id) where id_unit='" . $id_unit . "'")->result_array();
         foreach ($pcdunit as $icdunit) {
             $pcdia = $this->db->query("SELECT * FROM fr_ia_01 where id_asesi='" . $id_asesi . "' and id_kuk='" . $icdunit['id_kuk'] . "'");

@@ -76,9 +76,13 @@
                                                 <select name="id_asesor" class="js-states form-control" id="js-states">
                                                     <?php
                                                     foreach ($dataasesor as $dor) :
+                                                        $cek_asesor = $this->db->query("SELECT id_asesor from tb_askem where id_skema='" . $datajadwal['id_skema'] . "' and id_asesor='" . $dor->id . "'")->num_rows();
+                                                        if ($cek_asesor >= 1) {
                                                     ?>
-                                                        <option value="<?= $dor->id ?>"><?= $dor->nama ?></option>
-                                                    <?php endforeach; ?>
+                                                            <option value="<?= $dor->id ?>"><?= $dor->nama ?></option>
+                                                    <?php
+                                                        }
+                                                    endforeach; ?>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -86,9 +90,13 @@
                                                 <select name="id_asesi[]" class="js-states form-control" id="js-states-mul" multiple="multiple">
                                                     <?php
                                                     foreach ($dataasesi as $di) :
+                                                        $cek_asesi = $this->db->query("SELECT id_asesi from tb_sertifikasi where id_paket='" . $datajadwal['idpak'] . "' and id_asesi='" . $di->id . "'")->num_rows();
+                                                        if ($cek_asesi == 0) {
                                                     ?>
-                                                        <option value="<?= $di->id ?>"><?= $di->no_peserta . " | " . $di->nama . " | " . $di->kelas . " | " . $di->tahun_aktif ?></option>
-                                                    <?php endforeach; ?>
+                                                            <option value="<?= $di->id ?>"><?= $di->no_peserta . " | " . $di->nama . " | " . $di->kelas . " | " . $di->tahun_aktif ?></option>
+                                                    <?php
+                                                        }
+                                                    endforeach; ?>
                                                 </select>
                                             </div>
                                             <div class="form-group has-feedback">

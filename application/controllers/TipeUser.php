@@ -26,7 +26,7 @@ class TipeUser extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Level Pengguna'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tipeuser/v_tipeuser.php', $data);
+        $this->load->view('v_tipeuser/v_tipeuser', $data);
         $this->load->view('template/footer');
     }
 
@@ -46,7 +46,7 @@ class TipeUser extends CI_Controller
         $data['tipeuser'] = $this->M_TipeUser->getById($id_tipeuser);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'transaksi'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tipeuser/v_tipeuser_detail.php', $data);
+        $this->load->view('v_tipeuser/v_tipeuser_detail', $data);
         $this->load->view('template/footer');
     }
 
@@ -64,7 +64,7 @@ class TipeUser extends CI_Controller
 
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tipeuser/v_akses.php', $data);
+        $this->load->view('v_tipeuser/v_akses', $data);
         $this->load->view('template/footer');
     }
 
@@ -76,7 +76,7 @@ class TipeUser extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'transaksi'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tipeuser/v_tipeuser_add.php', $data);
+        $this->load->view('v_tipeuser/v_tipeuser_add', $data);
         $this->load->view('template/footer');
     }
 
@@ -86,7 +86,7 @@ class TipeUser extends CI_Controller
         $data = [
             'userlevel' => $tipeuser
         ];
-        
+
         if ($this->M_TipeUser->cekData($tipeuser) >= 1) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger left-icon-alert" role="alert"><strong>Gagal!</strong> Data Sudah Ada</div>');
             redirect('TipeUser/tambahdata');
@@ -94,20 +94,20 @@ class TipeUser extends CI_Controller
             $this->M_TipeUser->tambah($data);
             $data1 = $this->db->get_where('tb_userlevel', $data)->row_array();
             $datasubmenu = $this->db->query("SELECT * FROM tb_submenu")->result_array();
-            $dataakses = $this->db->query("SELECT * FROM tb_akses WHERE id_tipeuser =".$data1['id'])->num_rows();
-            
+            $dataakses = $this->db->query("SELECT * FROM tb_akses WHERE id_tipeuser =" . $data1['id'])->num_rows();
+
             if ($dataakses == 0) {
                 foreach ($datasubmenu as $daa) {
                     $this->db->insert('tb_akses', ['id_submenu' => $daa['id_submenu'], 'id_tipeuser' => $data1['id']]);
                 }
-            } 
+            }
             // $data = $this->M_TipeUser->cekkodetipeuser();
             // foreach ($data as $id) {
             //     $id = $id;
             //     $this->M_TipeUser->tambahakses($id);
-            }
-            $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"><strong>Sukses!</strong> Data Berhasil Ditambahkan</div>');
-            redirect('TipeUser');
+        }
+        $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"><strong>Sukses!</strong> Data Berhasil Ditambahkan</div>');
+        redirect('TipeUser');
         // }
     }
 
@@ -119,7 +119,7 @@ class TipeUser extends CI_Controller
         $data['tipeuser'] = $this->M_TipeUser->getById($id_tipeuser);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'transaksi'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tipeuser/v_tipeuser_ubah.php', $data);
+        $this->load->view('v_tipeuser/v_tipeuser_ubah', $data);
         $this->load->view('template/footer');
     }
 
@@ -178,13 +178,15 @@ class TipeUser extends CI_Controller
         }
     }
 
-    public function getTipeUser($id){
-        $query = $this->db->get_where('tb_tipeuser', ['id_tipeuser != ' => $id ])->result();
-        echo json_encode($query);        
+    public function getTipeUser($id)
+    {
+        $query = $this->db->get_where('tb_tipeuser', ['id_tipeuser != ' => $id])->result();
+        echo json_encode($query);
     }
 
-    public function getTipeUserAll(){
+    public function getTipeUserAll()
+    {
         $query = $this->db->get('tb_tipeuser')->result();
-        echo json_encode($query);        
+        echo json_encode($query);
     }
 }

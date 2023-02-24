@@ -46,6 +46,9 @@ class Mujikom extends CI_Model
     {
         $this->db->where('id', $id);
         $this->db->delete('tb_paket');
+
+        $this->db->where('id_paket', $id);
+        $this->db->delete('tb_sertifikasi');
     }
 
     function hapusrekam($id)

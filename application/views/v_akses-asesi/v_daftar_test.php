@@ -16,7 +16,7 @@
             <div class="col-sm-6">
                 <ul class="breadcrumb">
                     <li><a href="<?php echo base_url('/') ?>"><i class="fa fa-home"></i>Beranda</a></li>
-                    <li>Referensi</li>
+                    <li>Uji Kompetensi</li>
                     <li class="active">Daftar Test</li>
                 </ul>
             </div>
@@ -63,43 +63,6 @@
                             </div>
                         </div>
                         <div class="panel-body p-20">
-                            <div class="btn-group">
-                                <a href="<?= base_url('aksesasesor')  ?>" class="btn btn-warning mb-20">
-                                    <i class="fa fa-arrow-left text-white"></i>
-                                    Kembali
-                                </a>
-                                <button type="button" class="btn btn-info btn-animated btn-wide" data-toggle="modal" data-target="#modalTambah">
-                                    <span class="visible-content">Jadwalkan Test</span>
-                                    <span class="hidden-content"><i class="fa fa-plus"></i></span>
-                                </button>
-                            </div>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel">Pilih Jenis Test <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></h4>
-                                        </div>
-                                        <form action="<?= base_url('aksesasesor/tambah_test') ?>" method="POST">
-                                            <div class="modal-body">
-                                                <select name="jenis_test" class="form-control">
-                                                    <option value="1">Praktik Demonstrasi</option>
-                                                    <option value="2">Soal Pilihan Ganda</option>
-                                                    <option value="3">Soal Essay</option>
-                                                </select>
-                                                <input type="hidden" name="id_paket" value="<?= $ujikomdetail['idpak'] ?>">
-                                            </div>
-                                            <div class="modal-footer">
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-gray btn-wide btn-rounded" data-dismiss="modal"><i class="fa fa-times"></i>Batal</button>
-                                                    <button type="submit" class="btn bg-success btn-wide btn-rounded"><i class="fa fa-check"></i>Simpan</button>
-                                                </div>
-                                                <!-- /.btn-group -->
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                             <table id="dataSiswaIndex" class="display table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -121,12 +84,27 @@
                                             <td><?= $data['durasi'] ?></td>
                                             <td><?= $data['start_at'] ?></td>
                                             <td><?= $data['finish_at'] ?></td>
-                                            <td style="min-width: 110px">
-                                                <div class="btn-group">
-                                                    <a href="<?= base_url('aksesasesor/list_test/') . $data['id'] ?>" class="btn btn-success"><i class="fa fa-list"></i></a>
-                                                    <a href="<?= base_url('aksesasesor/ubah_test/') . $data['id'] ?>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-                                                    <a href="<?= base_url('aksesasesor/hapus_test/') . $data['id'] ?>" class="btn btn-danger" onclick="return confirm('Yakin untuk menghapus?')"><i class="fa fa-trash"></i></a>
-                                                </div>
+                                            <td class="text-center">
+                                                <?php
+                                                $now = date('Y-m-d H:m:s');
+                                                $status_test = $this->Maksesasesi->gettestasesi($idasesi, $data['id'])->row();
+                                                if ($status_test) {
+                                                    if ($status_test->status_test == 2) {
+                                                ?>
+                                                        <button class="btn btn-success">Selesai</button>
+                                                    <?php } elseif ($status_test->status_test == 1) { ?>
+                                                        <a href="<?= base_url('aksesasesi/mulai_test/') . $data['id'] ?>" class="btn btn-warning">Sedang Mengerjakan</a>
+                                                    <?php }
+                                                } else {
+                                                    if ($data['start_at'] <= $now and $data['finish_at'] >= $now) {
+                                                    ?>
+                                                        <a href="<?= base_url('aksesasesi/mulai_test/') . $data['id'] ?>" class="btn btn-info">Mulai</a>
+                                                    <?php } else if ($data['start_at'] >= $now) { ?>
+                                                        <button class="btn btn-primary">Belum Mulai</button>
+                                                    <?php } else { ?>
+                                                        <button class="btn btn-danger">Ditutup</button>
+                                                <?php }
+                                                } ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

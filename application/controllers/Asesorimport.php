@@ -67,7 +67,7 @@ class Asesorimport extends CI_Controller
 				$gagal = 0;
 				$berhasil = 0;
 				if (intval($sheetRows) >= 3) {
-					for ($i = 3; $i < count($sheetData); $i++) {
+					for ($i = 2; $i < count($sheetData); $i++) {
 						$cekNomet = $this->Masesor->cekNomet($sheetData[$i][0]);
 						$cekUsername = $this->Masesor->cekUsername($sheetData[$i][2]);
 						if ($cekNomet == 'kosong') {

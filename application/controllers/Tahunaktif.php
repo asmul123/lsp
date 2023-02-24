@@ -25,7 +25,7 @@ class Tahunaktif extends CI_Controller
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Tahun Aktif'])->row()->id_menus;
 
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tahunaktif/v_tahunaktif.php', $data);
+        $this->load->view('v_tahunaktif/v_tahunaktif', $data);
         $this->load->view('template/footer');
     }
 
@@ -43,7 +43,7 @@ class Tahunaktif extends CI_Controller
         $data['menu'] = $this->M_Setting->getmenu1($id);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Tahun Aktif'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tahunaktif/v_tahunaktif_add.php', $data);
+        $this->load->view('v_tahunaktif/v_tahunaktif_add', $data);
         $this->load->view('template/footer');
     }
 
@@ -72,7 +72,7 @@ class Tahunaktif extends CI_Controller
         $data['tahunaktif'] = $this->Mtahunaktif->getBYId($idta);
         $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Tahun Aktif'])->row()->id_menus;
         $this->load->view('template/sidebar', $data);
-        $this->load->view('v_tahunaktif/v_tahunaktif_ubah.php', $data);
+        $this->load->view('v_tahunaktif/v_tahunaktif_ubah', $data);
         $this->load->view('template/footer');
     }
 

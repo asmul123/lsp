@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/Theme/css/icheck/skins/line/blue.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/Theme/css/bootstrap-tour/bootstrap-tour.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/Theme/css/select2/select2.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>assets/Theme/css/switchery/switchery.min.css">
 
     <!-- ========== THEME CSS ========== -->
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/Theme/css/main.css" media="screen">

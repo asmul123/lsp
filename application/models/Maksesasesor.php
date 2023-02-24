@@ -32,6 +32,23 @@ class Maksesasesor extends CI_Model
         return $query->result_array();
     }
 
+    function getTestDetail($id)
+    {
+        $this->db->select('*');
+        $this->db->join('tb_jenis_test', 'tb_jenis_test.id_jenis = tb_daftar_test.id_jenis');
+        $this->db->where('id', $id);
+        $query = $this->db->get('tb_daftar_test');
+        return $query->row_array();
+    }
+
+    function getJenisTest($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id_jenis', $id);
+        $query = $this->db->get('tb_jenis_test');
+        return $query->row_array();
+    }
+
     function getCountUnitIa01($idas, $idunit, $kom)
     {
         $this->db->select('id');
@@ -340,5 +357,16 @@ class Maksesasesor extends CI_Model
     {
         $this->db->where('id_asesi', $idasesi);
         $this->db->update('fr_ak_02', $data);
+    }
+
+    function addtest($data)
+    {
+        $this->db->insert('tb_daftar_test', $data);
+    }
+
+    function releasetoken($data, $idtest)
+    {
+        $this->db->where('id', $idtest);
+        $this->db->update('tb_daftar_test', $data);
     }
 }

@@ -34,6 +34,8 @@
 <script src="<?php echo base_url() ?>assets/Theme/js/traffic-chart.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/task-list.js"></script>
 <script src="<?php echo base_url() ?>assets/Theme/js/script.js"></script>
+<script src="<?php echo base_url() ?>assets/Theme/js/prism/prism.js"></script>
+<script src="<?php echo base_url() ?>assets/Theme/js/switchery/switchery.min.js"></script>
 <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
@@ -103,7 +105,60 @@
 	$(function() {
 		// Summernote
 		$('.textarea').summernote()
-	})
+	});
+
+	$(function($) {
+		var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+		elems.forEach(function(html) {
+			var switchery = new Switchery(html);
+		});
+
+		// For blue switches
+		var blueElems = Array.prototype.slice.call(document.querySelectorAll('.js-switch-blue'));
+
+		blueElems.forEach(function(html) {
+			var switchery = new Switchery(html, {
+				color: '#3498db'
+			});
+		});
+
+		// For danger switches
+		var dangerElems = Array.prototype.slice.call(document.querySelectorAll('.js-switch-danger'));
+
+		dangerElems.forEach(function(html) {
+			var switchery = new Switchery(html, {
+				color: '#e74c3c'
+			});
+		});
+
+		// For warning switches
+		var warningElems = Array.prototype.slice.call(document.querySelectorAll('.js-switch-warning'));
+
+		warningElems.forEach(function(html) {
+			var switchery = new Switchery(html, {
+				color: '#f39c12'
+			});
+		});
+
+		// For small switches
+		var smallElems = Array.prototype.slice.call(document.querySelectorAll('.js-switch-small'));
+
+		smallElems.forEach(function(html) {
+			var switchery = new Switchery(html, {
+				size: 'small'
+			});
+		});
+
+		// For large switches
+		var largeElems = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));
+
+		largeElems.forEach(function(html) {
+			var switchery = new Switchery(html, {
+				size: 'large'
+			});
+		});
+	});
 </script>
 <script>
 	let baseUrl = "<?php echo base_url() ?>"
