@@ -116,9 +116,14 @@
                                         ?>
                                             <tr>
                                                 <td width="6%" align="center"><?= $No ?>.</td>
-                                                <td width="81%"><textarea name="jawaban<?= $data->id ?>" class="form-control"><?php if ($dataia) {
-                                                                                                                                    echo $dataia['jawaban'];
-                                                                                                                                } ?></textarea></td>
+                                                <td width="81%">
+                                                    <b>Pertanyaan :</b> <?= $data->pertanyaan ?> <br>
+                                                    <b>Kunci Jawaban :</b> <?= $data->jawaban ?><br>
+                                                    <b>Jawaban Asesi :</b>
+                                                    <textarea name="jawaban<?= $data->id ?>" class="textarea"><?php if ($dataia) {
+                                                                                                                    echo $dataia['jawaban'];
+                                                                                                                } ?></textarea>
+                                                </td>
                                                 <td align="center"><input type="radio" class="blue-style" name="kom<?= $data->id ?>" value="K" <?php if ($dataia) {
                                                                                                                                                     if ($dataia['kompetensi'] == "K") {
                                                                                                                                                         echo "checked";

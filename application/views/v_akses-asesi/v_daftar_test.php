@@ -86,7 +86,7 @@
                                             <td><?= $data['finish_at'] ?></td>
                                             <td class="text-center">
                                                 <?php
-                                                $now = date('Y-m-d H:m:s');
+                                                $now = date('Y-m-d H:i:s');
                                                 $status_test = $this->Maksesasesi->gettestasesi($idasesi, $data['id'])->row();
                                                 if ($status_test) {
                                                     if ($status_test->status_test == 2) {

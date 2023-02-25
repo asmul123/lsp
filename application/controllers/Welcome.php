@@ -16,10 +16,7 @@ class Welcome extends CI_Controller
 	public function index()
 	{
 		// var_dump($this->session);
-		$thisM = date('m');
 		$id = $this->session->userdata('tipeuser');
-		$nominalKredit = 0;
-		$nominalDebet = 0;
 		$asesi = $this->db->get('tb_asesi')->num_rows();
 		$asesor = $this->db->get('tb_asesor')->num_rows();
 		$skema = $this->db->get('tb_skema')->num_rows();
@@ -37,6 +34,8 @@ class Welcome extends CI_Controller
 		if ($this->session->userdata('tipeuser') == 1) {
 			$this->load->view('template/index', $data);
 		} else if ($this->session->userdata('tipeuser') == 2) {
+			$this->load->model('Masesor');
+			$data['id_asesor'] = $this->Masesor->getidasesor($this->session->userdata('id_user'));
 			$this->load->view('v_asesor/v_beranda', $data);
 		} else if ($this->session->userdata('tipeuser') == 3) {
 			redirect(base_url('aksesasesi'));

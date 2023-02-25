@@ -406,11 +406,14 @@ class Aksesasesi extends CI_Controller
 		$this->load->view('template/footer');
 	}
 
-	public function soal_test()
+	public function soal_test($no = null)
 	{
+		$this->load->model('Mfria05');
 		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
 		$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
-		$no = $this->input->post('no', true);
+		if ($no == null) {
+			$no = $this->input->post('no', true);
+		}
 		$no_soal = $this->input->post('no_soal', true);
 		$soal = $this->input->post('soal', true);
 		$jawaban = $this->input->post('jawaban', true);
@@ -481,8 +484,6 @@ class Aksesasesi extends CI_Controller
 				if ($data_status_test->row()->status_test == "2") {
 					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Anda telah menyelesaikan test ini</div>');
 					redirect(base_url('aksesasesi/daftar_test'));
-				} else {
-					$this->load->model('Mfria05');
 				}
 			} else {
 				if ($data_test->id_jenis == 1) {
@@ -506,28 +507,341 @@ class Aksesasesi extends CI_Controller
 				} else {
 					if ($data_test->random_soal == 1) {
 						$skema = $this->Maksesasesi->getskema($data['idasesi']);
-						$datasoal = $this->aksesasesi->getsoalessay($skema['id_skema'], 'Y');
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema'], 'Y');
 						$rekaman = "";
 						foreach ($datasoal as $ds) {
-							$rekaman = $rekaman . "#" . $ds->id . "_0";
+							$rekaman = $rekaman . "#" . $ds->id;
 						}
 					} else {
 						$skema = $this->Maksesasesi->getskema($data['idasesi']);
-						$datasoal = $this->aksesasesi->getsoalessay($skema['id_skema']);
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema']);
 						$rekaman = "";
 						foreach ($datasoal as $ds) {
-							$rekaman = $rekaman . "#" . $ds->id . "_0";
+							$rekaman = $rekaman . "#" . $ds->id;
 						}
 					}
 				}
-				$data = array(
+				$data_awal = array(
 					'id_asesi' => $data['idasesi'],
 					'id_test' => $this->session->userdata('id_test'),
 					'rekaman' => $rekaman,
 					'start_at' => date('Y-m-d H:i:s'),
 					'status_test' => '1'
 				);
-				$this->Maksesasesi->addasesitest($data);
+				$this->Maksesasesi->addasesitest($data_awal);
+			}
+			if ($no == null) {
+				$no = 1;
+			}
+			$data['no'] = $no;
+			$data['data_test'] = $this->Maksesasesi->gettestdet($this->session->userdata('id_test'))->row();
+			$durasi = $data['data_test']->durasi;
+			$dr = explode(":", $durasi);
+			$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
+			$data['status_test'] = $data_status_test->row();
+			$data['start_at'] = $data['status_test']->start_at;
+			$finish_at = new DateTime($data['data_test']->finish_at);
+			$datetime = new DateTime($data['start_at']);
+			$datetime->add(new DateInterval('PT' . $dr[0] . 'H' . $dr[1] . 'M'));
+			if ($finish_at < $datetime) {
+				$data['finish_at'] = $finish_at;
+			} else {
+				$data['finish_at'] = $datetime;
+			}
+			$data['rekaman'] = $data['status_test']->rekaman;
+			$this->load->view('template/header');
+			$this->load->view('v_akses-asesi/v_test-page', $data);
+			$this->load->view('template/footer');
+		} else {
+			$idtest = $this->input->post('idtest');
+			$token = $this->input->post('token');
+			if ($token) {
+				$cektoken = $this->Maksesasesi->gettestdet($idtest)->row()->token;
+				if ($cektoken == $token) {
+					$session = array(
+						'id_test' => $idtest
+					);
+					$this->session->set_userdata($session);
+					redirect(base_url('aksesasesi/soal_test'));
+				} else {
+					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Token yang anda masukan salah</div>');
+					redirect(base_url('aksesasesi/mulai_test/' . $idtest));
+				}
+			} else {
+				redirect(base_url('aksesasesi/daftar_test'));
+			}
+		}
+	}
+
+	public function essay_test($no = null)
+	{
+		$this->load->model('Mfria06');
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
+		if ($no == null) {
+			$no = $this->input->post('no', true);
+		}
+		$soal = $this->input->post('soal', true);
+		$unit = $this->input->post('unit', true);
+		$jawaban = $this->input->post('jawaban', true);
+		if ($jawaban) {
+			$jawaban_lama = $this->db->get_where('fr_ia_06', array('id_asesi' => $data['idasesi'], 'id_ia' => $soal))->num_rows();
+			$data_ans = array(
+				'id_asesi' => $data['idasesi'],
+				'id_unit' => $unit,
+				'id_ia' => $soal,
+				'jawaban' => $jawaban
+			);
+			if ($jawaban_lama >= 1) {
+				$this->db->where('id_ia', $soal);
+				$this->db->where('id_asesi', $data['idasesi']);
+				$this->db->update('fr_ia_06', $data_ans);
+			} else {
+				$this->db->insert('fr_ia_06', $data_ans);
+			}
+		}
+		if ($no == "akhir") {
+			$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
+			$data_akhir = array(
+				'status_test' => '2'
+			);
+			$this->db->where('id_test', $this->session->userdata('id_test'));
+			$this->db->where('id_asesi', $data['idasesi']);
+			$this->db->update('tb_status_test', $data_akhir);
+			$this->session->unset_userdata('id_test');
+			redirect(base_url('aksesasesi/daftar_test'));
+		}
+		if ($this->session->userdata('id_test')) {
+			$data_test = $this->Maksesasesi->gettestdet($this->session->userdata('id_test'))->row();
+			if ($data_status_test->num_rows() >= 1) {
+				if ($data_status_test->row()->status_test == "2") {
+					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Anda telah menyelesaikan test ini</div>');
+					redirect(base_url('aksesasesi/daftar_test'));
+				}
+			} else {
+				if ($data_test->id_jenis == 1) {
+					$rekaman = $data_test->soal_observasi;
+				} else if ($data_test->id_jenis == 2) {
+					if ($data_test->random_soal == 1) {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalpg($skema['id_skema'], 'Y');
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id . "-0";
+						}
+					} else {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalpg($skema['id_skema']);
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id . "-0";
+						}
+					}
+				} else {
+					if ($data_test->random_soal == 1) {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema'], 'Y');
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id;
+						}
+					} else {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema']);
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id;
+						}
+					}
+				}
+				$data_awal = array(
+					'id_asesi' => $data['idasesi'],
+					'id_test' => $this->session->userdata('id_test'),
+					'rekaman' => $rekaman,
+					'start_at' => date('Y-m-d H:i:s'),
+					'status_test' => '1'
+				);
+				$this->Maksesasesi->addasesitest($data_awal);
+			}
+			if ($no == null) {
+				$no = 1;
+			}
+			$data['no'] = $no;
+			$data['data_test'] = $this->Maksesasesi->gettestdet($this->session->userdata('id_test'))->row();
+			$durasi = $data['data_test']->durasi;
+			$dr = explode(":", $durasi);
+			$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
+			$data['status_test'] = $data_status_test->row();
+			$data['start_at'] = $data['status_test']->start_at;
+			$datetime = new DateTime($data['start_at']);
+			$datetime->add(new DateInterval('PT' . $dr[0] . 'H' . $dr[1] . 'M'));
+			if ($data['data_test']->finish_at < $datetime) {
+				$data['finish_at'] = $data['data_test']->finish_at;
+			} else {
+				$data['finish_at'] = $datetime;
+			}
+			$data['rekaman'] = $data['status_test']->rekaman;
+			$this->load->view('template/header');
+			$this->load->view('v_akses-asesi/v_essay-page', $data);
+			$this->load->view('template/footer');
+		} else {
+			$idtest = $this->input->post('idtest');
+			$token = $this->input->post('token');
+			if ($token) {
+				$cektoken = $this->Maksesasesi->gettestdet($idtest)->row()->token;
+				if ($cektoken == $token) {
+					$session = array(
+						'id_test' => $idtest
+					);
+					$this->session->set_userdata($session);
+					redirect(base_url('aksesasesi/essay_test'));
+				} else {
+					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Token yang anda masukan salah</div>');
+					redirect(base_url('aksesasesi/mulai_test/' . $idtest));
+				}
+			} else {
+				redirect(base_url('aksesasesi/daftar_test'));
+			}
+		}
+	}
+
+	public function hapus_target($id)
+	{
+		$this->db->select('*,tb_tugas_demonstrasi.id as idtugas');
+		$this->db->from('tb_tugas_demonstrasi');
+		$this->db->join('tb_status_test', 'tb_status_test.id=tb_tugas_demonstrasi.id_status_test');
+		$this->db->where('tb_tugas_demonstrasi.id', $id);
+		$query = $this->db->get()->row();
+		$cekuser = $query->id_asesi;
+		$jenis = $query->jenis;
+		$target = $query->target;
+		if ($cekuser == $this->Maksesasesi->getidasesi($this->session->userdata('id_user'))) {
+			$this->db->delete('tb_tugas_demonstrasi', array('id' => $id));
+			if ($jenis == 1) {
+				unlink('./assets/assesment/demonstrasi/' . $target);
+			}
+		}
+		redirect(base_url('aksesasesi/demonstrasi_test'));
+	}
+
+	public function demonstrasi_test($no = null)
+	{
+		$this->load->model('Mfria02');
+		if ($tambah = $this->input->post('tambah')) {
+			$id_status_test = $this->input->post('id_test');
+			$id_ia = $this->input->post('id_ia');
+			$judul = $this->input->post('judul');
+			$link = $this->input->post('link');
+			$data_tambah = array(
+				'id_ia' => $id_ia,
+				'id_status_test' => $id_status_test,
+				'jenis' => '2',
+				'judul' => $judul,
+				'target' => $link
+			);
+			$this->db->insert('tb_tugas_demonstrasi', $data_tambah);
+		} else if ($upload = $this->input->post('upload')) {
+			$count = count($_FILES['file']['name']);
+			$id_status_test = $this->input->post('id_test');
+			$id_ia = $this->input->post('id_ia');
+			$judul = $this->input->post('judul');
+			$link = $this->input->post('link');
+			for ($j = 0; $j < $count; $j++) {
+				$_FILES['files']['name'] = $_FILES['file']['name'][$j];
+				$_FILES['files']['type'] = $_FILES['file']['type'][$j];
+				$_FILES['files']['tmp_name'] = $_FILES['file']['tmp_name'][$j];
+				$_FILES['files']['error'] = $_FILES['file']['error'][$j];
+				$_FILES['files']['size'] = $_FILES['file']['size'][$j];
+				$config['upload_path'] = './assets/assesment/demonstrasi/';
+				$config['allowed_types'] = '*';
+				$config['max_size'] = $this->input->post('max_file');
+				$config['encrypt_name'] = TRUE;
+				$this->upload->initialize($config);
+				if (!$this->upload->do_upload('files')) {
+					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert">' . $this->upload->display_errors() . '</div>');
+				} else {
+					if ($count > 1) {
+						$nofile = $j + 1;
+						$judul_file = $judul . ' (' . $nofile . ')';
+					} else {
+						$judul_file = $judul;
+					}
+					$target = $this->upload->data('file_name');
+					$data_upload = array(
+						'id_ia' => $id_ia,
+						'id_status_test' => $id_status_test,
+						'jenis' => '1',
+						'judul' => $judul_file,
+						'target' => $target
+					);
+					$this->db->insert('tb_tugas_demonstrasi', $data_upload);
+					$this->session->set_flashdata('alert', '<div class="alert alert-success left-icon-alert" role="alert">Upload berhasil</div>');
+				}
+			}
+		}
+		$data['idasesi'] = $this->Maksesasesi->getidasesi($this->session->userdata('id_user'));
+		if ($no == 'akhir') {
+			$data_akhir = array(
+				'status_test' => '2'
+			);
+			$this->db->where('id_test', $this->session->userdata('id_test'));
+			$this->db->where('id_asesi', $data['idasesi']);
+			$this->db->update('tb_status_test', $data_akhir);
+			$this->session->unset_userdata('id_test');
+			redirect(base_url('aksesasesi/daftar_test'));
+		}
+		$data_status_test = $this->Maksesasesi->gettestasesi($data['idasesi'], $this->session->userdata('id_test'));
+		if ($this->session->userdata('id_test')) {
+			$data_test = $this->Maksesasesi->gettestdet($this->session->userdata('id_test'))->row();
+			if ($data_status_test->num_rows() >= 1) {
+				if ($data_status_test->row()->status_test == "2") {
+					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Anda telah menyelesaikan test ini</div>');
+					redirect(base_url('aksesasesi/daftar_test'));
+				}
+			} else {
+				if ($data_test->id_jenis == 1) {
+					$rekaman = $data_test->soal_observasi;
+				} else if ($data_test->id_jenis == 2) {
+					if ($data_test->random_soal == 1) {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalpg($skema['id_skema'], 'Y');
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id . "-0";
+						}
+					} else {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalpg($skema['id_skema']);
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id . "-0";
+						}
+					}
+				} else {
+					if ($data_test->random_soal == 1) {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema'], 'Y');
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id;
+						}
+					} else {
+						$skema = $this->Maksesasesi->getskema($data['idasesi']);
+						$datasoal = $this->Maksesasesi->getsoalessay($skema['id_skema']);
+						$rekaman = "";
+						foreach ($datasoal as $ds) {
+							$rekaman = $rekaman . "#" . $ds->id;
+						}
+					}
+				}
+				$data_awal = array(
+					'id_asesi' => $data['idasesi'],
+					'id_test' => $this->session->userdata('id_test'),
+					'rekaman' => $rekaman,
+					'start_at' => date('Y-m-d H:i:s'),
+					'status_test' => '1'
+				);
+				$this->Maksesasesi->addasesitest($data_awal);
 			}
 			if ($no == null) {
 				$no = 1;
@@ -544,7 +858,7 @@ class Aksesasesi extends CI_Controller
 			$data['finish_at'] = $datetime;
 			$data['rekaman'] = $data['status_test']->rekaman;
 			$this->load->view('template/header');
-			$this->load->view('v_akses-asesi/v_test-page', $data);
+			$this->load->view('v_akses-asesi/v_demonstrasi-page', $data);
 			$this->load->view('template/footer');
 		} else {
 			$idtest = $this->input->post('idtest');
@@ -556,7 +870,7 @@ class Aksesasesi extends CI_Controller
 						'id_test' => $idtest
 					);
 					$this->session->set_userdata($session);
-					redirect(base_url('aksesasesi/soal_test'));
+					redirect(base_url('aksesasesi/demonstrasi_test'));
 				} else {
 					$this->session->set_flashdata('alert', '<div class="alert alert-danger left-icon-alert" role="alert"> <strong>Gagal!</strong> Token yang anda masukan salah</div>');
 					redirect(base_url('aksesasesi/mulai_test/' . $idtest));

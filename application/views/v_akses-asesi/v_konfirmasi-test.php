@@ -25,56 +25,72 @@
                                         <h5>Konfirmasi Test</h5>
                                     </div>
                                 </div>
-                                <form action="<?= base_url('aksesasesi/soal_test/' . $data_test->id) ?>" method="POST">
-                                    <div class="panel-body">
-                                        <table>
-                                            <tr>
-                                                <td width="20%">Nama Paket</td>
-                                                <td width="2%">:</td>
-                                                <td><?= $ujikomdetail['nama_paket'] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Skema Sertifikasi</td>
-                                                <td>:</td>
-                                                <td><?= $ujikomdetail["judul_skema"] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jenis Test</td>
-                                                <td>:</td>
-                                                <td><?= $data_test->jenis_test ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Durasi</td>
-                                                <td>:</td>
-                                                <td><?= $data_test->durasi ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nomor Peserta</td>
-                                                <td>:</td>
-                                                <td><?= $data_asesi['nama'] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nama Peserta</td>
-                                                <td>:</td>
-                                                <td><?= $data_asesi['no_peserta'] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Token</td>
-                                                <td>:</td>
-                                                <td>
-                                                    <input type="text" name="token" autofocus required size="8">
-                                                    <input type="hidden" name="idtest" value="<?= $idtest ?>">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="submit" class="btn btn-info" value="Mulai"></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </form>
-                                <!-- /.col-md-12 -->
+                                <?php
+                                if ($data_test->id_jenis == '1') {
+                                ?>
+                                    <form action="<?= base_url('aksesasesi/demonstrasi_test/' . $data_test->id) ?>" method="POST">
+                                    <?php
+                                } else
+                                if ($data_test->id_jenis == '2') {
+                                    ?>
+                                        <form action="<?= base_url('aksesasesi/soal_test/' . $data_test->id) ?>" method="POST">
+                                        <?php
+                                    } else
+                                if ($data_test->id_jenis == '3') {
+                                        ?>
+                                            <form action="<?= base_url('aksesasesi/essay_test/' . $data_test->id) ?>" method="POST">
+                                            <?php
+                                        }
+                                            ?>
+                                            <div class="panel-body">
+                                                <table>
+                                                    <tr>
+                                                        <td width="20%">Nama Paket</td>
+                                                        <td width="2%">:</td>
+                                                        <td><?= $ujikomdetail['nama_paket'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Skema Sertifikasi</td>
+                                                        <td>:</td>
+                                                        <td><?= $ujikomdetail["judul_skema"] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Jenis Test</td>
+                                                        <td>:</td>
+                                                        <td><?= $data_test->jenis_test ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Durasi</td>
+                                                        <td>:</td>
+                                                        <td><?= $data_test->durasi ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nomor Peserta</td>
+                                                        <td>:</td>
+                                                        <td><?= $data_asesi['nama'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Nama Peserta</td>
+                                                        <td>:</td>
+                                                        <td><?= $data_asesi['no_peserta'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Token</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <input type="text" name="token" autofocus required size="8">
+                                                            <input type="hidden" name="idtest" value="<?= $idtest ?>">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="submit" class="btn btn-info" value="Mulai"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            </form>
+                                            <!-- /.col-md-12 -->
                             </div>
                         </div>
                     </div>

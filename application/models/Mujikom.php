@@ -30,6 +30,17 @@ class Mujikom extends CI_Model
         return $this->db->get();
     }
 
+    function getAjuanak01($key, $value, $id)
+    {
+        $this->db->select('*');
+        $this->db->from('fr_ak_01');
+        $this->db->join('tb_sertifikasi', 'tb_sertifikasi.id_asesi = fr_ak_01.id_asesi');
+        $this->db->join('tb_asesi', 'tb_asesi.id = fr_ak_01.id_asesi');
+        $this->db->where($key, $value);
+        $this->db->where('fr_ak_01.id_asesor', $id);
+        return $this->db->get();
+    }
+
     function getDetail($id)
     {
         $query = $this->db->query("SELECT *,tb_paket.id as idpak, tb_skema.id as idskema FROM tb_paket left join tb_skema on (tb_paket.id_skema=tb_skema.id) right join tb_tuk on (tb_paket.id_tuk = tb_tuk.id) where tb_paket.id='$id'");

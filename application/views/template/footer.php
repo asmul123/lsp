@@ -228,7 +228,7 @@
 		'sort': false
 	});
 
-	$('#dataSiswaIndex2').DataTable({
+	$('#dataAjuanIndex').DataTable({
 		"order": [
 			[3, "desc"]
 		],
@@ -236,7 +236,15 @@
 		'sort': false
 	});
 
-	$('#dataSiswaIndex3').DataTable({
+	$('#dataTerimaIndex').DataTable({
+		"order": [
+			[3, "desc"]
+		],
+		'scrollX': true,
+		'sort': false
+	});
+
+	$('#dataTolakIndex').DataTable({
 		"order": [
 			[3, "desc"]
 		],

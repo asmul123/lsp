@@ -79,7 +79,6 @@
                                                         <a href="<?= base_url('aksesasesor/daftar_asesi/') . $data['id_paket'] ?> " class="btn btn-success"><i class="fa fa-users"></i>Daftar Asesi</a>
                                                         <a href="<?= base_url('aksesasesor/daftar_test/') . $data['id_paket'] ?> " class="btn btn-warning"><i class="fa fa-edit"></i>Daftar Test</a>
                                                     </div>
-
                                                 </center>
                                             </td>
 

@@ -364,6 +364,12 @@ class Maksesasesor extends CI_Model
         $this->db->insert('tb_daftar_test', $data);
     }
 
+    function edittest($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('tb_daftar_test', $data);
+    }
+
     function releasetoken($data, $idtest)
     {
         $this->db->where('id', $idtest);

@@ -131,6 +131,119 @@ class Aksesasesor extends CI_Controller
         redirect(base_url('aksesasesor/list_test/' . $idtest));
     }
 
+    public function reset_test_asesi($idtest, $id)
+    {
+        $data = array(
+            'status_test' => '1'
+        );
+        $this->db->where('id', $id);
+        $this->db->update('tb_status_test', $data);
+        redirect(base_url('aksesasesor/list_test/' . $idtest));
+    }
+
+    public function hapus_test_asesi($idtest, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('tb_status_test');
+        redirect(base_url('aksesasesor/list_test/' . $idtest));
+    }
+
+    public function selesai_test_asesi($idtest, $id)
+    {
+        $betul = 0;
+        $rekaman_test = $this->db->get_where('tb_status_test', array('id' => $id))->row()->rekaman;
+        $id_asesi = $this->db->get_where('tb_status_test', array('id' => $id))->row()->id_asesi;
+        $rt = explode("#", $rekaman_test);
+        $jml_soal = count($rt) - 1;
+        for ($i = 1; $i < count($rt); $i++) {
+            $hasil = explode("-", $rt[$i]);
+            $cek_jawaban = $this->Maksesasesi->cekjawabanpg($hasil[0]);
+            if ($cek_jawaban == $hasil[1]) {
+                $kom = 'K';
+                $betul++;
+            } else {
+                $kom = 'BK';
+            }
+            $cek_ia = $this->db->get_where('fr_ia_05', array('id_asesi' => $id_asesi, 'id_ia' => $hasil[0]))->num_rows();
+            $id_unit = $this->db->get_where('tb_ia_05', array('id' => $hasil[0]))->row()->id_unit;
+            $data_ia = array(
+                'id_asesi' => $id_asesi,
+                'id_unit' => $id_unit,
+                'id_ia' => $hasil[0],
+                'kompetensi' => $kom,
+                'jawaban' => $hasil[1]
+            );
+            if ($cek_ia >= 1) {
+                $id_fr = $this->db->get_where('fr_ia_05', array('id_asesi' => $id_asesi, 'id_ia' => $hasil[0]))->row()->id;
+                $this->db->where('id', $id_fr);
+                $this->db->update('fr_ia_05', $data_ia);
+            } else {
+                $this->db->insert('fr_ia_05', $data_ia);
+            }
+        }
+        $nilai = $betul / $jml_soal * 100;
+        $data_akhir = array(
+            'nilai' => $nilai,
+            'status_test' => '2'
+        );
+        $this->db->where('id', $id);
+        $this->db->update('tb_status_test', $data_akhir);
+        redirect(base_url('aksesasesor/list_test/' . $idtest));
+    }
+
+    public function proses_demonstrasi_test()
+    {
+        $id = $this->input->post('id_status_test', true);
+        $nilai = $this->input->post('nilai', true);
+        $kompetensi = $this->input->post('kompetensi', true);
+        $rekaman_test = $this->db->get_where('tb_status_test', array('id' => $id))->row()->rekaman;
+        $id_asesi = $this->db->get_where('tb_status_test', array('id' => $id))->row()->id_asesi;
+        $idtest = $this->db->get_where('tb_status_test', array('id' => $id))->row()->id_test;
+        $rt = explode("#", $rekaman_test);
+        $proses = 0;
+        $tambah = 0;
+        $ubah = 0;
+        if ($kompetensi == 1) {
+            for ($i = 1; $i < count($rt); $i++) {
+                $daftar_unit = $this->db->get_where('tb_ia_02', array('id' => $rt[$i]))->row()->daftar_unit;
+                $du = explode("#", $daftar_unit);
+                for ($j = 1; $j < count($du); $j++) {
+                    $this->db->select('tb_kuk.id as idkuk');
+                    $this->db->from('tb_kuk');
+                    $this->db->join('tb_elemen', 'tb_elemen.id=tb_kuk.id_elemen');
+                    $this->db->where('id_unit', $du[$j]);
+                    $datakuk = $this->db->get()->result();
+                    foreach ($datakuk as $dk) {
+                        $proses++;
+                        $data_ia = array(
+                            'id_asesi' => $id_asesi,
+                            'id_unit' => $du[$j],
+                            'id_kuk' => $dk->idkuk,
+                            'kompetensi' => 'K'
+                        );
+                        $cek_ia = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $du[$j]))->num_rows();
+                        if ($cek_ia >= 1) {
+                            $ubah++;
+                            $id_fr = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $du[$j]))->row()->id;
+                            $this->db->where('id', $id_fr);
+                            $this->db->update('fr_ia_01', $data_ia);
+                        } else {
+                            $tambah++;
+                            $this->db->insert('fr_ia_01', $data_ia);
+                        }
+                    }
+                }
+            }
+        }
+        $data_akhir = array(
+            'nilai' => $nilai,
+            'status_test' => '2'
+        );
+        $this->db->where('id', $id);
+        $this->db->update('tb_status_test', $data_akhir);
+        redirect(base_url('aksesasesor/list_test/' . $idtest . '/' . count($rt) . '/' . count($du) . '/' . count($datakuk) . '/' . $tambah . '/' . $ubah));
+    }
+
     public function tambah_test()
     {
         $this->load->view('template/header');
@@ -145,6 +258,21 @@ class Aksesasesor extends CI_Controller
 
         $this->load->view('template/sidebar', $data);
         $this->load->view('v_aksesasesor/v_daftar_test-form', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function ubah_test($idtest)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['daftartest'] = $this->Maksesasesor->getTestDetail($idtest);
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['ujikomdetail'] = $this->Mujikom->getDetail($data['daftartest']['id_paket']);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Pelaksanaan Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_aksesasesor/v_daftar_test-edit', $data);
         $this->load->view('template/footer');
     }
 
@@ -181,7 +309,12 @@ class Aksesasesor extends CI_Controller
             'id_jenis' => $id_jenis,
             'id_paket' => $id_paket
         ];
-        $this->Maksesasesor->addtest($data);
+        $idtest = $this->input->post('idtest');
+        if ($idtest) {
+            $this->Maksesasesor->edittest($data, $idtest);
+        } else {
+            $this->Maksesasesor->addtest($data);
+        }
         $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil ditambahhkan</div>');
         redirect(base_url('aksesasesor/daftar_test/' . $id_paket));
     }

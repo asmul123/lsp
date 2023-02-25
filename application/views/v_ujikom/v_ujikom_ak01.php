@@ -20,16 +20,12 @@
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li role="presentation" class="active"><a href="#mengajukan" aria-controls="mengajukan" role="tab" data-toggle="tab">Mengajukan <span class="badge badge-info">
                                                 <?php
-                                                echo $this->Mujikom->getAjuanapl02('1', $idasesor)->num_rows(); ?>
+                                                echo $this->Mujikom->getAjuanak01('ttd_asesor', '', $idasesor)->num_rows(); ?>
                                             </span>
                                         </a></li>
                                     <li role="presentation"><a href="#diterima" aria-controls="diterima" role="tab" data-toggle="tab">Diterima <span class="badge badge-success">
                                                 <?php
-                                                echo $this->Mujikom->getAjuanapl02('2', $idasesor)->num_rows(); ?>
-                                            </span></a></li>
-                                    <li role="presentation"><a href="#ditolak" aria-controls="ditolak" role="tab" data-toggle="tab">Ditolak <span class="badge badge-danger">
-                                                <?php
-                                                echo $this->Mujikom->getAjuanapl02('3', $idasesor)->num_rows(); ?>
+                                                echo $this->Mujikom->getAjuanak01('ttd_asesor !=', '', $idasesor)->num_rows(); ?>
                                             </span></a></li>
                                 </ul>
 
@@ -50,7 +46,7 @@
                                             <tbody>
                                                 <?php
                                                 $no = 1;
-                                                $dataditerima = $this->Mujikom->getAjuanapl02('1', $idasesor)->result_array();
+                                                $dataditerima = $this->Mujikom->getAjuanak01('ttd_asesor', '', $idasesor)->result_array();
                                                 foreach ($dataditerima as $data) :
                                                     $datapaket = $this->Mujikom->getDetail($data['id_paket']);
 
@@ -65,7 +61,7 @@
                                                         <td class="text-center">
                                                             <center>
                                                                 <div class="btn btn-group">
-                                                                    <a href="<?= base_url('ujikom/proses_apl02/') . $data['id_asesi'] ?>" class="btn btn-info"><i class="fa fa-pencil"></i> Proses</a>
+                                                                    <a href="<?= base_url('ujikom/proses_ak01/') . $data['id_asesi'] ?>" class="btn btn-info"><i class="fa fa-pencil"></i> Proses</a>
                                                                 </div>
                                                             </center>
                                                         </td>
@@ -90,7 +86,7 @@
                                             <tbody>
                                                 <?php
                                                 $no = 1;
-                                                $dataditerima = $this->Mujikom->getAjuanapl02('2', $idasesor)->result_array();
+                                                $dataditerima = $this->Mujikom->getAjuanak01('ttd_asesor !=', '', $idasesor)->result_array();
                                                 foreach ($dataditerima as $data) :
                                                     $datapaket = $this->Mujikom->getDetail($data['id_paket']);
 
@@ -105,47 +101,7 @@
                                                         <td class="text-center">
                                                             <center>
                                                                 <div class="btn btn-group">
-                                                                    <a href="<?= base_url('ujikom/proses_apl02/') . $data['id_asesi'] ?>" class="btn btn-info"><i class="fa fa-pencil"></i> Proses</a>
-                                                                </div>
-                                                            </center>
-                                                        </td>
-
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="ditolak">
-                                        <table id="dataTolakIndex" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">No</th>
-                                                    <th class="text-center">Nama Asesi</th>
-                                                    <th class="text-center">Nama Paket</th>
-                                                    <th class="text-center">Judul Skema</th>
-                                                    <th class="text-center">Tanggal Asesmen</th>
-                                                    <th width="200px" class="text-center">Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $no = 1;
-                                                $dataditerima = $this->Mujikom->getAjuanapl02('3', $idasesor)->result_array();
-                                                foreach ($dataditerima as $data) :
-                                                    $datapaket = $this->Mujikom->getDetail($data['id_paket']);
-
-                                                ?>
-
-                                                    <tr>
-                                                        <td class="text-center"><?= $no++; ?></td>
-                                                        <td><?= $data['nama']; ?></td>
-                                                        <td><?= $datapaket['nama_paket'] ?></td>
-                                                        <td><?= $datapaket['judul_skema'] ?></td>
-                                                        <td><?= $datapaket['tgl_sertifikasi'] ?></td>
-                                                        <td class="text-center">
-                                                            <center>
-                                                                <div class="btn btn-group">
-                                                                    <a href="<?= base_url('ujikom/proses_apl02/') . $data['id_asesi'] ?>" class="btn btn-info"><i class="fa fa-pencil"></i> Proses</a>
+                                                                    <a href="<?= base_url('ujikom/proses_ak01/') . $data['id_asesi'] ?>" class="btn btn-info"><i class="fa fa-pencil"></i> Proses</a>
                                                                 </div>
                                                             </center>
                                                         </td>

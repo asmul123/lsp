@@ -9,7 +9,7 @@
                 </div>
             </div>
             <!-- /.container-fluid -->
-            <form action="<?= base_url('aksesasesi/soal_test') ?>" method="POST">
+            <form action="<?= base_url('aksesasesi/essay_test') ?>" method="POST">
                 <section class="section">
                     <div class="container-fluid">
                         <div class="content-internal">
@@ -22,33 +22,21 @@
                                 </h4>
                                 <hr>
                                 <?php
-                                if ($data_test->id_jenis == 2) {
+                                if ($data_test->id_jenis == 3) {
                                     $es = explode('#', $rekaman);
                                     $akhir = count($es);
-                                    $ia = explode('-', $es[$no]);
-                                    $soal = $this->Mfria05->getdetailfria05($ia[0]);
-                                    $jw = explode('#', $soal['jawaban']);
+                                    $soal = $this->Mfria06->getdetailfria06($es[$no]);
+                                    $jawaban = $this->db->get_where('fr_ia_06', array('id_asesi' => $idasesi, 'id_ia' => $es[$no]))->row()->jawaban;
                                 ?>
-                                    <input type="hidden" name="soal" value="<?= $ia[0] ?>">
-                                    <input type="hidden" name="no_soal" value="<?= $no ?>">
+                                    <input type="hidden" name="soal" value="<?= $es[$no] ?>">
+                                    <input type="hidden" name="unit" value="<?= $soal['id_unit'] ?>">
                                     <p>
                                     <h5><?= $soal['pertanyaan'] ?></h5>
                                     </p>
-                                    <?php for ($j = 1; $j <= 5; $j++) {
-                                        $jawaban = explode("_", $jw[$j]);
-                                        if ($jawaban[1] != "") {
-                                    ?>
-                                            <table width="100%">
-                                                <tr>
-                                                    <td valign="top" width="5%"><input type="radio" name="jawaban" class="blue-style" value="<?= $jawaban[0] ?>" <?php if ($jawaban[0] == $ia[1]) {
-                                                                                                                                                                        echo "checked";
-                                                                                                                                                                    } ?>></td>
-                                                    <td valign="top" width="95%"><?= $jawaban[1] ?></td>
-                                                </tr>
-                                            </table>
-                                    <?php }
-                                    } ?>
-
+                                    Jawaban Anda :
+                                    <textarea class="textarea" name="jawaban" value=""><?php if ($jawaban) {
+                                                                                            echo $jawaban;
+                                                                                        } ?></textarea>
                                 <?php
                                 }
                                 if ($no != 1) {
@@ -74,11 +62,11 @@
                                     <tr>
                                         <?php
                                         for ($i = 1; $i < count($es); $i++) {
-                                            $cia = explode('-', $es[$i]);
                                             $btn = "default";
+                                            $cekjawaban = $this->db->get_where('fr_ia_06', array('id_asesi' => $idasesi, 'id_ia' => $es[$i]))->num_rows();
                                             if ($no == $i) {
                                                 $btn = "info";
-                                            } else if ($cia[1] != 0) {
+                                            } else if ($cekjawaban > 0) {
                                                 $btn = "success";
                                             }
                                         ?>
@@ -139,7 +127,7 @@
             if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("demo").innerHTML = "00:00:00";
-                window.location.href = "<?= base_url('aksesasesi/soal_test/akhir') ?>";
+                window.location.href = "<?= base_url('aksesasesi/essay_test/akhir') ?>";
             }
         }, 1000);
     </script>

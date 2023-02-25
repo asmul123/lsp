@@ -79,6 +79,7 @@
                                     <thead>
                                         <tr>
                                             <th rowspan="2" class="text-center">No</th>
+                                            <th rowspan="2" class="text-center">Pertanyaan</th>
                                             <th colspan="5" class="text-center">Jawaban</th>
                                             <th colspan="2" class="text-center">Rekomendasi</th>
                                         </tr>
@@ -98,7 +99,8 @@
                                         $No     = 1;
                                         foreach ($datafria05 as $data) {
                                             $dataia = $this->Maksesasesor->getRefIa05($data->id, $dataasesi['idas']);
-                                            $kunci = $this->db->get_where('tb_ia_05',  array('id' => $dataia['id_ia']))->row()->kunci;
+                                            $soal = $this->db->get_where('tb_ia_05',  array('id' => $dataia['id_ia']))->row();
+                                            $kunci = $soal->kunci;
                                             if ($kunci == 1) {
                                                 $kunci = "A";
                                             } elseif ($kunci == 2) {
@@ -113,6 +115,18 @@
                                         ?>
                                             <tr>
                                                 <td width="6%" align="center"><?= $No ?>.</td>
+                                                <td>
+                                                    <b>Pertanyaan : </b><?= $soal->pertanyaan ?><br>
+                                                    <b>Option :</b>
+                                                    <ol type="a">
+                                                        <?php
+                                                        $op = explode("#", $soal->jawaban);
+                                                        for ($i = 1; $i <= 5; $i++) {
+                                                            $isiop = explode("_", $op[$i]);
+                                                            echo "<li>" . $isiop['1'] . "</li>";
+                                                        } ?>
+                                                    </ol>
+                                                </td>
                                                 <td align="center"><input type="radio" class="blue-style" name="jawab<?= $data->id ?>" value="1" <?php if ($dataia) {
                                                                                                                                                         if ($dataia['jawaban'] == "1") {
                                                                                                                                                             echo "checked";

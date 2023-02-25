@@ -16,6 +16,7 @@ class Ujikom extends CI_Controller
         $this->load->model('Masesor');
         $this->load->model('Masesi');
         $this->load->model('Maksesasesi');
+        $this->load->model('Mak01');
         $this->load->model('M_Akses');
         $this->load->helper('tgl_indo');
         cek_login_user();
@@ -63,6 +64,37 @@ class Ujikom extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function kerahasiaan()
+    {
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['idasesor'] = $this->Masesor->getidasesor($this->session->userdata('id_user'));
+        $data['ujikom'] = $this->Mujikom->getAll();
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_ak01', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function ak01_process()
+    {
+
+        $id_asesi = $this->input->post('id_asesi', true);
+        $ttd = $this->input->post('ttd', false);
+        $jmlak01 = $this->Maksesasesi->getcountak01($id_asesi);
+        $data = array(
+            'tgl_ttd_asesor' => date('Y-m-d'),
+            'ttd_asesor' => $ttd
+        );
+        if ($jmlak01 != 0) {
+            $this->Maksesasesi->editak01($data, $id_asesi);
+            $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Dipebaharui</div>');
+            redirect(base_url('ujikom/kerahasiaan'));
+        }
+    }
+
     public function proses_pengajuan($idasesi)
     {
         $this->load->view('template/header');
@@ -94,6 +126,24 @@ class Ujikom extends CI_Controller
 
         $this->load->view('template/sidebar', $data);
         $this->load->view('v_ujikom/v_ujikom_apl02-app', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function proses_ak01($idasesi)
+    {
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['dataasesi'] = $this->Masesi->getasesidetail($idasesi);
+        $data['jadwal'] = $this->Maksesasesi->getjadwalasesi($idasesi);
+        $data['skema'] = $this->Maksesasesi->getskema($idasesi);
+        $data['dataak01'] = $this->Mak01->getak01($data['skema']['id_skema']);
+        $data['idasesi'] = $idasesi;
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom_ak01-app', $data);
         $this->load->view('template/footer');
     }
 
