@@ -2,7 +2,7 @@
     <div class="container-fluid bg-white">
         <div class="row page-title-div">
             <div class="col-sm-6">
-                <h2 class="title">FR.APL-02. ASESMEN MANDIRI ASESI</h2>
+                <h2 class="title">FR.AK-01. PERSETUJUAN ASESMEN DAN KERAHASIAAN</h2>
                 <p class="sub-title">LSP P1 - SMK NEGERI 4 GARUT</p>
             </div>
             <div class="row">
