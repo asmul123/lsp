@@ -16,6 +16,7 @@ class Apl01 extends CI_Controller
 		$this->load->model('Mskema');
 		$this->load->model('Mapl01');
 		$this->load->model('M_Akses');
+		$this->load->helper('tgl_indo');
 
 		cek_login_user();
 	}
@@ -85,7 +86,7 @@ class Apl01 extends CI_Controller
 		redirect('apl01/index/' . $idskema);
 	}
 
-	public function cetak($idskema)
+	public function cetak($idskema, $idasesi = null)
 	{
 		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
 		$this->load->library('pdfgenerator');
@@ -99,8 +100,28 @@ class Apl01 extends CI_Controller
 
 		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
 		$data['dataunit'] = $this->Mskema->getunit($data['dataskema']['id']);
+		if ($idasesi) {
+			$data['aplasesi'] = $this->Mapl01->getapl01asesi($idasesi);
+			$dataURI    = $data['aplasesi']['ttd'];
+			$dataPieces = explode(',', $dataURI);
+			if ($dataPieces[0] == "image/png;base64") {
+				$encodedImg = $dataPieces[1];
+				$decodedImg = base64_decode($encodedImg);
+
+				//  Check if image was properly decoded
+				if ($decodedImg !== false) {
+					$gbr = '../assets/img/tmp/ttd_asesi.png';
+					if (file_put_contents($gbr, $decodedImg) !== false) {
+						if ($gbr) {
+							$data['ttd_asesi'] = $gbr;
+						}
+					}
+				}
+			}
+		}
 		// $this->load->view('template/header_cetak');
 		$html = $this->load->view('v_apl01/v_apl01-cetak', $data, true);
+		// unlink($gbr);
 		// $this->load->view('template/footer_cetak');
 
 		$this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);

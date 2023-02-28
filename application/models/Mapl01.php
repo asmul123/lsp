@@ -11,6 +11,16 @@ class Mapl01 extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    function getapl01asesi($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_apl_01');
+        $this->db->join('tb_approve_apl01', 'tb_approve_apl01.id_asesi = tb_apl_01.id_asesi');
+        $this->db->join('tb_asesi', 'tb_asesi.id = tb_apl_01.id_asesi');
+        $this->db->where('tb_apl_01.id_asesi', $id);
+        return $this->db->get()->row();
+    }
+
     function getpersyaratanById($id)
     {
         $this->db->select('*');

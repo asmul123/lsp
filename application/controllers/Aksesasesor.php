@@ -148,6 +148,16 @@ class Aksesasesor extends CI_Controller
         redirect(base_url('aksesasesor/list_test/' . $idtest));
     }
 
+    public function hapus_test($id, $idpaket)
+    {
+        $this->db->where('id_test', $id);
+        $this->db->delete('tb_status_test');
+
+        $this->db->where('id', $id);
+        $this->db->delete('tb_daftar_test');
+        redirect(base_url('aksesasesor/daftar_test/' . $idpaket));
+    }
+
     public function selesai_test_asesi($idtest, $id)
     {
         $betul = 0;

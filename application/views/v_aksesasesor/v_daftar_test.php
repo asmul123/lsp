@@ -125,7 +125,7 @@
                                                 <div class="btn-group">
                                                     <a href="<?= base_url('aksesasesor/list_test/') . $data['id'] ?>" class="btn btn-success"><i class="fa fa-list"></i></a>
                                                     <a href="<?= base_url('aksesasesor/ubah_test/') . $data['id'] ?>" class="btn btn-warning"><i class="fa fa-pencil"></i></a>
-                                                    <a href="<?= base_url('aksesasesor/hapus_test/') . $data['id'] ?>" class="btn btn-danger" onclick="return confirm('Yakin untuk menghapus?')"><i class="fa fa-trash"></i></a>
+                                                    <a href="<?= base_url('aksesasesor/hapus_test/' . $data['id'] . '/' . $ujikomdetail['idpak']) ?>" class="btn btn-danger" onclick="return confirm('Yakin untuk menghapus?')"><i class="fa fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
