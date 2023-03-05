@@ -30,8 +30,9 @@ class Maksesasesi extends CI_Model
 
     function getAk01Asesi($id)
     {
-        $this->db->select('*');
+        $this->db->select('*,fr_ak_01.id as id, tb_asesi.id as id_asesi');
         $this->db->from('fr_ak_01');
+        $this->db->join('tb_asesi', 'tb_asesi.id=fr_ak_01.id_asesi');
         $this->db->where('id_asesi', $id);
         return $this->db->get()->row_array();
     }

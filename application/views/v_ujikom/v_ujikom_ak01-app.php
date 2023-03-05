@@ -57,7 +57,7 @@
                             <tr>
                                 <td colspan="2">Nama Asesi</td>
                                 <td>:</td>
-                                <td colspan="2"><?= $this->session->userdata('nama') ?></td>
+                                <td colspan="2"><?= $HAD['nama'] ?></td>
                             </tr>
                             <tr>
                                 <td colspan="2" rowspan="2">Bukti yang akan dikumpulkan</td>

@@ -452,8 +452,7 @@ class Aksesasesor extends CI_Controller
         $add = 0;
         $update = 0;
         $id_unit = $this->input->post('id_unit', true);
-        $durasi = $thdurasi;
-        $durasi = $thdurasi;
+        $id_asesi = $this->input->post('id_asesi', true);
         $pcdunit = $this->db->query("SELECT tb_kuk.id as id_kuk FROM tb_kuk left join tb_elemen on (tb_kuk.id_elemen=tb_elemen.id) where id_unit='" . $id_unit . "'")->result_array();
         foreach ($pcdunit as $icdunit) {
             $pcdia = $this->db->query("SELECT * FROM fr_ia_01 where id_asesi='" . $id_asesi . "' and id_kuk='" . $icdunit['id_kuk'] . "'");
