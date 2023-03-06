@@ -229,12 +229,13 @@ class Aksesasesor extends CI_Controller
                             'id_asesi' => $id_asesi,
                             'id_unit' => $du[$j],
                             'id_kuk' => $dk->idkuk,
+                            'nilai' => $nilai,
                             'kompetensi' => 'K'
                         );
-                        $cek_ia = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $du[$j]))->num_rows();
+                        $cek_ia = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $dk->idkuk))->num_rows();
                         if ($cek_ia >= 1) {
                             $ubah++;
-                            $id_fr = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $du[$j]))->row()->id;
+                            $id_fr = $this->db->get_where('fr_ia_01', array('id_asesi' => $id_asesi, 'id_kuk' => $dk->idkuk))->row()->id;
                             $this->db->where('id', $id_fr);
                             $this->db->update('fr_ia_01', $data_ia);
                         } else {
