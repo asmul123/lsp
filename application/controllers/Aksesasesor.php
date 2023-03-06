@@ -461,11 +461,15 @@ class Aksesasesor extends CI_Controller
             $nilai = $this->input->post('nilai' . $icdunit['id_kuk'], true);
             if ($kom != "") {
                 if ($jcdia >= 1) {
+                    $this->Maksesasesor->delfria01($icdunit['id_kuk'], $id_asesi);
                     $data = array(
-                        'kompetensi' => $kom,
-                        'nilai' => $nilai
+                        'kompetensi' => 'K',
+                        'nilai' => $nilai,
+                        'id_asesi' => $id_asesi,
+                        'id_kuk' => $icdunit['id_kuk'],
+                        'id_unit' => $du->id
                     );
-                    $this->Maksesasesor->editfria01($data, $icdunit['id_kuk'], $id_asesi);
+                    $this->Maksesasesor->addfria01($data);
                     $update++;
                 } else {
                     $data = array(
@@ -714,10 +718,14 @@ class Aksesasesor extends CI_Controller
                 $pcdia = $this->db->query("SELECT * FROM fr_ia_01 where id_asesi='" . $id_asesi . "' and id_kuk='" . $icdunit['id_kuk'] . "'");
                 $jcdia = $pcdia->num_rows();
                 if ($jcdia >= 1) {
+                    $this->Maksesasesor->delfria01($icdunit['id_kuk'], $id_asesi);
                     $data = array(
-                        'kompetensi' => 'K'
+                        'kompetensi' => 'K',
+                        'id_asesi' => $id_asesi,
+                        'id_kuk' => $icdunit['id_kuk'],
+                        'id_unit' => $du->id
                     );
-                    $this->Maksesasesor->editfria01($data, $icdunit['id_kuk'], $id_asesi);
+                    $this->Maksesasesor->addfria01($data);
                     $update++;
                 } else {
                     $data = array(

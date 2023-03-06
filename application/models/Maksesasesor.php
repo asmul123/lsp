@@ -300,6 +300,13 @@ class Maksesasesor extends CI_Model
         $this->db->update('fr_ia_01', $data);
     }
 
+    function delfria01($id, $idasesi)
+    {
+        $this->db->where('id_kuk', $id);
+        $this->db->where('id_asesi', $idasesi);
+        $this->db->delete('fr_ia_01');
+    }
+
     function addfria03($data)
     {
         $this->db->insert('fr_ia_03', $data);
