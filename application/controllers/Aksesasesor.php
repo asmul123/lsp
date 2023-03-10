@@ -464,11 +464,11 @@ class Aksesasesor extends CI_Controller
                 if ($jcdia >= 1) {
                     $this->Maksesasesor->delfria01($icdunit['id_kuk'], $id_asesi);
                     $data = array(
-                        'kompetensi' => 'K',
+                        'kompetensi' => $kom,
                         'nilai' => $nilai,
                         'id_asesi' => $id_asesi,
                         'id_kuk' => $icdunit['id_kuk'],
-                        'id_unit' => $du->id
+                        'id_unit' => $id_unit
                     );
                     $this->Maksesasesor->addfria01($data);
                     $update++;
