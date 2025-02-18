@@ -23,22 +23,52 @@
     <tr>
         <td colspan="2">TUK</td>
         <td>:</td>
-        <td>Sewaktu/Tempat Kerja/Mandiri*</td>
+        <td>
+            
+        <?php
+                                    if($idasesi != null){
+                                        if($datathisser['jenis_tuk']=="Sewaktu"){
+                                            echo "Sewaktu/<s>Tempat Kerja/Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Tempat Kerja"){
+                                            echo "<s>Sewaktu</s>/Tempat Kerja/<s>Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Mandiri"){
+                                            echo "<s>Sewaktu/Tempat Kerja</s>/Mandiri*";
+                                        } else {
+                                            echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                        }
+                                    } else {
+                                        echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                    }
+                                    
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesor</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesor'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesi</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesi'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Tanggal</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo date_indo($datathisser['tgl_sertifikasi']);}
+                                    ?>
+        </td>
     </tr>
 </table>
 <br>
@@ -77,17 +107,32 @@ if ($datafria03) {
         $No     = 1;
         foreach ($datafria03 as $data) {
             $dataunit = $this->Mskema->getunitdetail($data->id_unit);
+            if($idasesi != null){
+                $dataia = $this->Maksesasesor->getRefIa03($data->id, $idasesi);
+            }
         ?>
             <tr>
                 <td width="6%" align="center"><?= $No ?>.</td>
                 <td width="61%">(<?= $dataunit['kode_unit'] ?>) <?= $data->pertanyaan ?></td>
-                <td align="center"><input type="checkbox"></td>
-                <td align="center"><input type="checkbox"></td>
+                <td align="center"><input type="checkbox" <?php if ($idasesi != null) {
+                                                                                                                                                    if ($dataia['kompetensi'] == "K") {
+                                                                                                                                                        echo "checked";
+                                                                                                                                                    }
+                                                                                                                                                } ?>></td>
+                <td align="center"><input type="checkbox" <?php if ($idasesi != null) {
+                                                                                                                                                    if ($dataia['kompetensi'] == "BK") {
+                                                                                                                                                        echo "checked";
+                                                                                                                                                    }
+                                                                                                                                                } ?>></td>
             </tr>
             <tr>
                 <td colspan="2">
                     Tanggapan:
-                    <p>&nbsp;</p>
+                    <p>
+                    <?php if ($idasesi != null) {
+                        echo $dataia['jawaban'];
+                                                                                                                                                } ?>
+                    </p>
                 </td>
                 <td align="center">&nbsp;</td>
                 <td align="center">&nbsp;</td>
@@ -99,7 +144,9 @@ if ($datafria03) {
         <tr>
             <td colspan="4">
                 Umpan balik untuk asesi:
-                <p>&nbsp;</p>
+                <p><?php if ($idasesi != null) {
+                        echo $dataia['umpan_balik'];                                                                                                                                                } ?>
+                    </p>
             </td>
         </tr>
     </table>
@@ -114,11 +161,21 @@ if ($datafria03) {
         </td>
         <td width="15%" valign="top">
             <p>Asesi:</p>
-            <p>&nbsp;</p>
+            <p>
+            <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesi'];}
+                                    ?>
+                                </td>
+            </p>
         </td>
         <td width="15%" valign="top">
             <p>Asesor:</p>
-            <p>&nbsp;</p>
+            <p>
+            <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesor'];}
+                                    ?>
+                                </td>
+            </p>
         </td>
     </tr>
 
@@ -128,10 +185,17 @@ if ($datafria03) {
             <p>&nbsp;</p>
         </td>
         <td valign="top">
-            <p>&nbsp;</p>
+            <p><?php if ($idasesi!=null && $ak01asesi->ttd_asesi != "") { ?>                
+                    <img src='<?= $ttd_asesi ?>' width="150px" /><br>
+                    <?=date_indo($datathisser['tgl_sertifikasi'])?>
+                <?php }?></p>
+
         </td>
         <td valign="top">
-            <p>&nbsp;</p>
+            <p><?php if ($idasesi!=null && $ak01asesi->ttd_asesor != "") { ?>                
+                    <img src='<?= $ttd_asesor ?>' width="150px" /><br>
+                    <?=date_indo($datathisser['tgl_sertifikasi'])?>
+                <?php }?></p>
         </td>
     </tr>
 </table>

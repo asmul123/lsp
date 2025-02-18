@@ -23,22 +23,51 @@
     <tr>
         <td colspan="2">TUK</td>
         <td>:</td>
-        <td>Sewaktu/Tempat Kerja/Mandiri*</td>
+        <td>
+        <?php
+                                    if($idasesi != null){
+                                        if($datathisser['jenis_tuk']=="Sewaktu"){
+                                            echo "Sewaktu/<s>Tempat Kerja/Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Tempat Kerja"){
+                                            echo "<s>Sewaktu</s>/Tempat Kerja/<s>Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Mandiri"){
+                                            echo "<s>Sewaktu/Tempat Kerja</s>/Mandiri*";
+                                        } else {
+                                            echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                        }
+                                    } else {
+                                        echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                    }
+                                    
+                                    ?>            
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesor</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesor'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesi</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesi'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Tanggal</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo date_indo($datathisser['tgl_sertifikasi']);}
+                                    ?>
+        </td>
     </tr>
 </table>
 <br>
@@ -97,31 +126,25 @@ Catatan:<br>
         rekomendasi tindak lanjut untuk menilai. Pertanyaan presisi jika tidak dapat dijawab, penilai disarankan untuk menambahkan lebih banyak latihan / bekerja di bawah pengawasan, sedangkan jika pertanyaan akurasi dilewatkan maka penilai
         direkomendasikan untuk pelatihan ulang</li>
 </ul>
-<table width="100%" border='1' cellpadding="4" cellspacing="0">
-    <tr>
-        <td width="19%" valign="top">
-            <p>Nama:</p>
-        </td>
-        <td width="15%" valign="top">
-            <p>Asesi:</p>
-            <p>&nbsp;</p>
-        </td>
-        <td width="15%" valign="top">
-            <p>Asesor:</p>
-            <p>&nbsp;</p>
-        </td>
-    </tr>
-
-    <tr>
-        <td valign="top"><strong>Tanda Tangan dan Tanggal</strong>
-            <p><strong></strong></p>
-            <p>&nbsp;</p>
-        </td>
-        <td valign="top">
-            <p>&nbsp;</p>
-        </td>
-        <td valign="top">
-            <p>&nbsp;</p>
-        </td>
-    </tr>
+<table width="100%" align="center" border="0">
+        <tr>
+            <td height="50" valign="bottom"><strong>Penyusun dan Validator</strong></td>
+        </tr>
+</table>
+<table width="100%" cellspacing="0" cellpadding="4" align="center" border="1">
+        <tr height="40">
+            <td align="center" width="50%"><strong>Nama</strong></td>
+            <td align="center" width="30%"><strong>Jabatan</strong></td>
+            <td align="center" width="20%"><strong>Tanggal dan Tanda Tangan</strong></td>
+        </tr>
+        <tr height="60">
+            <td align="center"></td>
+            <td align="center">Penyusun</td>
+            <td align="center"></td>
+        </tr>
+        <tr height="60">
+            <td align="center"></td>
+            <td align="center">Validator</td>
+            <td align="center"></td>
+        </tr>
 </table>

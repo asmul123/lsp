@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="panel-body p-20">
-                            <a href="<?= base_url('skema/detail/' . $dataskema['id'])  ?>" class="btn btn-warning mb-20">
+                            <a href="#" onclick="window.history.go(-1); return false;" class="btn btn-warning mb-20">
                                 <i class="fa fa-arrow-left text-white"></i>
                                 Kembali
                             </a>
@@ -72,7 +72,7 @@
                                         <td>FR.IA. 05. Pertanyaan Tertulis Pilihan Ganda
                                         </td>
                                         <td class="text-center" style="max-width: 30px">
-                                            <a href="<?= base_url('fria05/cetaksoal/') . $dataskema['id'];  ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
+                                            <a href="<?= base_url('fria05/cetaksoal/') . $dataskema['id'];  ?><?php if($idasesi != null ){ echo "/$idasesi"; } ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -80,7 +80,7 @@
                                         <td>FR.IA.5A. Kunci Jawaban
                                         </td>
                                         <td class="text-center" style="max-width: 30px">
-                                            <a href="<?= base_url('fria05/cetakkunci/') . $dataskema['id'];  ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
+                                            <a href="<?= base_url('fria05/cetakkunci/') . $dataskema['id'];  ?><?php if($idasesi != null ){ echo "/$idasesi"; } ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -88,7 +88,7 @@
                                         <td>FR.IA.5B. Lembar Jawaban
                                         </td>
                                         <td class="text-center" style="max-width: 30px">
-                                            <a href="<?= base_url('fria05/cetakjawaban/') . $dataskema['id'];  ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
+                                            <a href="<?= base_url('fria05/cetakjawaban/') . $dataskema['id'];  ?><?php if($idasesi != null ){ echo "/$idasesi"; } ?>" class="btn btn-warning" target="_blank"><i class="fa fa-print"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -23,22 +23,52 @@
     <tr>
         <td colspan="2">TUK</td>
         <td>:</td>
-        <td>Sewaktu/Tempat Kerja/Mandiri*</td>
+        <td>
+            
+        <?php
+                                    if($idasesi != null){
+                                        if($datathisser['jenis_tuk']=="Sewaktu"){
+                                            echo "Sewaktu/<s>Tempat Kerja/Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Tempat Kerja"){
+                                            echo "<s>Sewaktu</s>/Tempat Kerja/<s>Mandiri</s>*";
+                                        } elseif($datathisser['jenis_tuk']=="Mandiri"){
+                                            echo "<s>Sewaktu/Tempat Kerja</s>/Mandiri*";
+                                        } else {
+                                            echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                        }
+                                    } else {
+                                        echo "Sewaktu/Tempat Kerja/Mandiri*";
+                                    }
+                                    
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesor</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesor'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Nama Asesi</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo $datathisser['namaasesi'];}
+                                    ?>
+        </td>
     </tr>
     <tr>
         <td colspan="2">Tanggal</td>
         <td>:</td>
-        <td>&nbsp;</td>
+        <td>
+        <?php
+                                    if($idasesi != null) { echo date_indo($datathisser['tgl_sertifikasi']);}
+                                    ?>
+        </td>
     </tr>
 </table>
 <br>

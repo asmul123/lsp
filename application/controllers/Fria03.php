@@ -15,7 +15,11 @@ class Fria03 extends CI_Controller
 		$this->load->model('M_Setting');
 		$this->load->model('Mfria03');
 		$this->load->model('Mskema');
+		$this->load->model('Mujikom');
+		$this->load->model('Mak01');
+        $this->load->model('Maksesasesor');
 		$this->load->model('M_Akses');
+		$this->load->helper('tgl_indo');
 
 		cek_login_user();
 	}
@@ -126,13 +130,51 @@ class Fria03 extends CI_Controller
 		redirect(base_url('fria03/index/' . $id_skema));
 	}
 
-	public function cetak($idskema)
+	public function cetak($idskema, $idasesi = null)
 	{
 
 		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
 		$data['datafria03'] = $this->Mfria03->getfria03($idskema);
 		$data['dataunit'] = $this->Mskema->getunit($idskema);
 		$data['idskema'] = $idskema;
+		$data['idasesi'] = $idasesi;
+		if ($idasesi != null) {
+			$idser = $this->Mujikom->getserasesi($idasesi);
+			$data['datathisser'] = $this->Mujikom->getthisser($idser);
+			$data['ak01asesi'] = $this->Mak01->getak01asesi($idasesi);
+			$dataURI    = $data['ak01asesi']->ttd_asesi;
+			$dataPieces = explode(',', $dataURI);
+			if ($dataPieces[0] == "data:image/png;base64") {
+				$encodedImg = $dataPieces[1];
+				$decodedImg = base64_decode($encodedImg);
+
+				//  Check if image was properly decoded
+				if ($decodedImg !== false) {
+					$gbr = './assets/img/tmp/ttd_asesi.png';
+					if (file_put_contents($gbr, $decodedImg) !== false) {
+						if ($gbr) {
+							$data['ttd_asesi'] = base_url().'assets/img/tmp/ttd_asesi.png';
+						}
+					}
+				}
+			}
+			$dataURI2    = $data['ak01asesi']->ttd_asesor;
+			$dataPieces2 = explode(',', $dataURI2);
+			if ($dataPieces2[0] == "data:image/png;base64") {
+				$encodedImg2 = $dataPieces2[1];
+				$decodedImg2 = base64_decode($encodedImg2);
+
+				//  Check if image was properly decoded
+				if ($decodedImg2 !== false) {
+					$gbr2 = './assets/img/tmp/ttd_asesor.png';
+					if (file_put_contents($gbr2, $decodedImg2) !== false) {
+						if ($gbr2) {
+							$data['ttd_asesor'] = base_url().'assets/img/tmp/ttd_asesor.png';
+						}
+					}
+				}
+			}
+		}
 		$this->load->view('template/header_cetak');
 		$this->load->view('v_fria03/v_fria03-cetak', $data);
 		$this->load->view('template/footer_cetak');
