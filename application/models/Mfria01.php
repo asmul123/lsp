@@ -18,4 +18,12 @@ class Mfria01 extends CI_Model
         $this->db->where('id_elemen', $id);
         $this->db->update('tb_ia_01', $data);
     }
+
+    function getkomia01asesi($idasesi, $idkuk)
+    {
+        $this->db->select('kompetensi');
+        $this->db->where('id_asesi', $idasesi);
+        $this->db->where('id_kuk', $idkuk);
+        return $this->db->get('fr_ia_01')->row()->kompetensi;
+    }
 }

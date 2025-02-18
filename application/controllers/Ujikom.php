@@ -312,4 +312,24 @@ class Ujikom extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success left-icon-alert" role="alert"> <strong>Sukses!</strong> Data Berhasil Mendambahkan : ' . $berhasil . ' data dan gagal Menambahkan : ' . $gagal . ' data</div>');
         redirect(base_url('ujikom/asesorasesi/' . $id_paket));
     }
+
+    
+	public function cetakrekam($idser,$idpak)
+	{
+        
+        $this->load->view('template/header');
+        $id = $this->session->userdata('tipeuser');
+        $data['menu'] = $this->M_Setting->getmenu1($id);
+        $data['datathisser'] = $this->Mujikom->getthisser($idser);
+        $data['datapaket'] = $this->Mujikom->getDetail($idpak);
+        $data['idpak'] = $idpak;
+        $data['dataskema'] = $this->Mskema->getskemadetail($data['datapaket']['id_skema']);
+        $data['akses'] = $this->M_Akses->getByLinkSubMenu(urlPath(), $id);
+        $data['activeMenu'] = $this->db->get_where('tb_submenu', ['submenu' => 'Jadwal Ujikom'])->row()->id_menus;
+
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('v_ujikom/v_ujikom-cetak', $data);
+        $this->load->view('template/footer');
+
+	}
 }

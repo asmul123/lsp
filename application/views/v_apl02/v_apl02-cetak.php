@@ -60,6 +60,7 @@ $datakop = $this->M_Setting->getkop();
             <?php
             $dataelemen = $this->Mskema->getelemen($du->id);
             foreach ($dataelemen as $de) {
+                $dataapl02 = $this->Mapl02->getApl02Asesi($idasesi, $de->id);
             ?>
                 <tr>
                     <td colspan="2"><?= $de->urutan ?>. Elemen: <strong><?= $de->elemen ?></strong>
@@ -75,8 +76,8 @@ $datakop = $this->M_Setting->getkop();
                             ?>
                         </ul>
                     </td>
-                    <td align="center"><input type="checkbox" disabled></td>
-                    <td align="center"><input type="checkbox" disabled></td>
+                    <td align="center"><input type="checkbox" disabled <?php if($idasesi!=null){ if ($dataapl02->kompetensi == "K"){ echo "checked"; }} ?>></td>
+                    <td align="center"><input type="checkbox" disabled <?php if($idasesi!=null){ if ($dataapl02->kompetensi == "BK"){ echo "checked"; }} ?>></td>
                     <td>&nbsp;</td>
                 </tr>
             <?php } ?>
@@ -90,14 +91,24 @@ $datakop = $this->M_Setting->getkop();
         <tr>
             <td width="19%" valign="top">
                 <p>Nama Asesi:</p>
+                <p><?php if ($idasesi!=null) {
+                                            echo $appapl02->namaasesi;
+                                        } ?>
+                                        </p>
             </td>
             <td width="15%" valign="top">
                 <p>Tanggal:</p>
-                <p>&nbsp;</p>
+                <p><?php if ($idasesi!=null) {
+                                            echo date_indo($appapl02->tgl_ajuan);
+                                        } ?>
+                                        </p></p>
             </td>
             <td width="15%" valign="top">
                 <p>Tanda Tangan Asesi:</p>
-                <p>&nbsp;</p>
+                <p>
+                <?php if ($idasesi!=null && $appapl02->ttd_asesi != "") { ?>
+                    <img src='<?= $ttd_asesi ?>' width="100px" />
+                <?php } ?></p>
             </td>
         </tr>
         <tr>
@@ -106,16 +117,26 @@ $datakop = $this->M_Setting->getkop();
         <tr>
             <td valign="top">
                 <p><strong>Nama Asesor:</strong></p>
-                <p>&nbsp;</p>
+                <p>
+                <?php if ($idasesi!=null) {
+                                            echo $appapl02->namaasesor;
+                                        } ?></p>
             </td>
             <td valign="top">
                 <p><strong>Rekomendasi:</strong><br />
+                <?php if ($idasesi!=null) {
+                                            echo $appapl02->catatan;
+                                        } ?>
                 </p>
             </td>
             <td valign="top">
                 <p><strong>Tanda Tangan dan Tanggal:</strong></p>
-                <p><strong>&nbsp;</strong></p>
-                <p><strong>&nbsp;</strong></p>
+                <?php if ($idasesi!=null && $appapl02->ttd_asesor != "") { ?>
+                <p>
+                    <img src='<?= $ttd_asesor ?>' width="100px" />
+                </p>
+                <p><?=date_indo($appapl02->tgl_terima)?></p>
+                <?php } ?>
             </td>
         </tr>
     </table>

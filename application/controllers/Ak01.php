@@ -15,7 +15,9 @@ class Ak01 extends CI_Controller
 		$this->load->model('M_Setting');
 		$this->load->model('Mak01');
 		$this->load->model('Mskema');
+		$this->load->model('Mujikom');
 		$this->load->model('M_Akses');
+		$this->load->helper('tgl_indo');
 
 		cek_login_user();
 	}
@@ -70,28 +72,54 @@ class Ak01 extends CI_Controller
 		}
 	}
 
-	public function cetak($idskema)
+	public function cetak($idskema, $idasesi = null)
 	{
-		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
-		$this->load->library('pdfgenerator');
 
-		$file_pdf = 'FR.APL.02. ASESMEN MANDIRI';
-		// setting paper
-		$paper = 'A4';
-		//orientasi paper potrait / landscape
-		$orientation = "potrait";
-
-		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
-		$data['dataak011'] = $this->Mak01->getak011($idskema);
-		$data['dataak013'] = $this->Mak01->getak013($idskema);
+		$data['dataak01'] = $this->Mak01->getak01($idskema);
 		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
 		$data['dataunit'] = $this->Mskema->getunit($idskema);
 		$data['idskema'] = $idskema;
-		$this->load->view('template/header_cetak');
-		// $html = $this->load->view('v_ak01/v_ak01-cetak', $data, true);
-		$this->load->view('v_ak01/v_ak01-cetak', $data);
-		$this->load->view('template/footer_cetak');
+		
+		$data['idasesi'] = $idasesi;
+		if ($idasesi != null) {
+			$idser = $this->Mujikom->getserasesi($idasesi);
+			$data['datathisser'] = $this->Mujikom->getthisser($idser);
+			$data['ak01asesi'] = $this->Mak01->getak01asesi($idasesi);
+			$dataURI    = $data['ak01asesi']->ttd_asesi;
+			$dataPieces = explode(',', $dataURI);
+			if ($dataPieces[0] == "data:image/png;base64") {
+				$encodedImg = $dataPieces[1];
+				$decodedImg = base64_decode($encodedImg);
 
-		// $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+				//  Check if image was properly decoded
+				if ($decodedImg !== false) {
+					$gbr = './assets/img/tmp/ttd_asesi.png';
+					if (file_put_contents($gbr, $decodedImg) !== false) {
+						if ($gbr) {
+							$data['ttd_asesi'] = base_url().'assets/img/tmp/ttd_asesi.png';
+						}
+					}
+				}
+			}
+			$dataURI2    = $data['ak01asesi']->ttd_asesor;
+			$dataPieces2 = explode(',', $dataURI2);
+			if ($dataPieces2[0] == "data:image/png;base64") {
+				$encodedImg2 = $dataPieces2[1];
+				$decodedImg2 = base64_decode($encodedImg2);
+
+				//  Check if image was properly decoded
+				if ($decodedImg2 !== false) {
+					$gbr2 = './assets/img/tmp/ttd_asesor.png';
+					if (file_put_contents($gbr2, $decodedImg2) !== false) {
+						if ($gbr2) {
+							$data['ttd_asesor'] = base_url().'assets/img/tmp/ttd_asesor.png';
+						}
+					}
+				}
+			}
+		}
+		$this->load->view('template/header_cetak');
+		$this->load->view('v_ak01/v_ak01_cetak', $data);
+		$this->load->view('template/footer_cetak');
 	}
 }

@@ -36,7 +36,7 @@ $datakop = $this->M_Setting->getkop();
             <td width="1%">:</td>
             <td colspan="4" style="border-bottom:1pt">
                 <?php
-                if ($aplasesi) {
+                if ($idasesi!=null) {
                     echo $aplasesi->nama_lengkap;
                 }
                 ?>
@@ -46,7 +46,7 @@ $datakop = $this->M_Setting->getkop();
             <td>No. KTP/NIK/Paspor</td>
             <td>:</td>
             <td colspan="4" style="border-bottom:1pt"><?php
-                                                        if ($aplasesi) {
+                                                        if ($idasesi!=null) {
                                                             echo $aplasesi->nik;
                                                         }
                                                         ?></td>
@@ -56,7 +56,7 @@ $datakop = $this->M_Setting->getkop();
             <td>:</td>
             <td colspan="4" style="border-bottom:1pt">
                 <?php
-                if ($aplasesi) {
+                if ($idasesi!=null) {
                     echo $aplasesi->tempat_lahir . ", " . date_indo($aplasesi->tgl_lahir);
                 }
                 ?></td>
@@ -66,12 +66,14 @@ $datakop = $this->M_Setting->getkop();
             <td>:</td>
             <td colspan="4">
                 <?php
-                if ($aplasesi) {
+                if ($idasesi!=null) {
                     if ($aplasesi->jenis_kelamin == 'L') {
                         echo "Laki-laki / <s>Wanita</s> *)";
                     } else {
                         echo "<s>Laki-laki</s> / Wanita *)";
                     }
+                } else {
+                    echo "Laki-laki / Wanita *)";
                 }
                 ?>
             </td>
@@ -80,7 +82,7 @@ $datakop = $this->M_Setting->getkop();
             <td>Kebangsaan</td>
             <td>:</td>
             <td colspan="4" style="border-bottom:1pt"><?php
-                                                        if ($aplasesi) {
+                                                        if ($idasesi!=null) {
                                                             echo $aplasesi->kebangsaan;
                                                         }
                                                         ?></td>
@@ -89,7 +91,7 @@ $datakop = $this->M_Setting->getkop();
             <td>Alamat rumah</td>
             <td>:</td>
             <td colspan="4" style="border-bottom:1pt"><?php
-                                                        if ($aplasesi) {
+                                                        if ($idasesi!=null) {
                                                             echo $aplasesi->alamat_rumah;
                                                         }
                                                         ?></td>
@@ -100,7 +102,7 @@ $datakop = $this->M_Setting->getkop();
             <td colspan="2" style="border-bottom:1pt"></td>
             <td width="12%">Kode Pos </td>
             <td style="border-bottom:1pt">: <?php
-                                            if ($aplasesi) {
+                                            if ($idasesi!=null) {
                                                 echo $aplasesi->kode_pos;
                                             }
                                             ?></td>
@@ -110,7 +112,7 @@ $datakop = $this->M_Setting->getkop();
             <td>:</td>
             <td width="5%">Rumah</td>
             <td width="27%" style="border-bottom:1pt">: <?php
-                                                        if ($aplasesi) {
+                                                        if ($idasesi!=null) {
                                                             echo $aplasesi->telp;
                                                         }
                                                         ?></td>
@@ -122,13 +124,13 @@ $datakop = $this->M_Setting->getkop();
             <td>&nbsp;</td>
             <td>HP</td>
             <td style="border-bottom:1pt">: <?php
-                                            if ($aplasesi) {
+                                            if ($idasesi!=null) {
                                                 echo $aplasesi->telp;
                                             }
                                             ?></td>
             <td>E-mail</td>
             <td style="border-bottom:1pt">: <?php
-                                            if ($aplasesi) {
+                                            if ($idasesi!=null) {
                                                 echo $aplasesi->email;
                                             }
                                             ?></td>
@@ -207,7 +209,7 @@ $datakop = $this->M_Setting->getkop();
     <tr>
         <td colspan="2" rowspan="5" valign="top">Tujuan Asesmen</td>
         <td>:</td>
-        <td><input type="checkbox" <?php if ($aplasesi) {
+        <td><input type="checkbox" <?php if ($idasesi!=null) {
                                         echo "checked";
                                     } ?> disabled> Sertifikasi</td>
     </tr>
@@ -285,7 +287,7 @@ $datakop = $this->M_Setting->getkop();
             <tr>
                 <td align="center"><?= $no_bukti++ ?>.</td>
                 <td><?= $db->bukti ?></td>
-                <td align="center"><input type="checkbox" <?php if ($aplasesi) {
+                <td align="center"><input type="checkbox" <?php if ($idasesi!=null) {
                                                                 echo "checked";
                                                             } ?> disabled> </td>
                 <td align="center"><input type="checkbox" disabled> </td>
@@ -299,29 +301,53 @@ $datakop = $this->M_Setting->getkop();
     <tr>
         <td width="55%" rowspan="3" valign="top"><strong>&nbsp;Rekomendasi (diisi oleh LSP):</strong><br>
             &nbsp;Berdasarkan ketentuan persyaratan dasar, maka pemohon: <br>
-            <strong>&nbsp;Diterima</strong><strong>/ Tidak diterima</strong> *) sebagai peserta sertifikasi<br>
+            <?php if ($idasesi!=null) {
+                if($aplasesi->status == 2){
+                    echo "<strong>&nbsp;Diterima</strong><strong>/ <s>Tidak diterima</s></strong>";
+                } else if ($aplasesi->status == 3){
+                    echo "<strong>&nbsp;<s>Diterima</s></strong><strong>/ Tidak diterima</strong>";
+                } else {
+                    echo "<strong>&nbsp;Diterima</strong><strong>/ Tidak diterima</strong>";
+                }
+            } else {
+?>
+            <strong>&nbsp;Diterima</strong><strong>/ Tidak diterima</strong> 
+<?php
+                                        } ?>
+            
+            *) sebagai peserta sertifikasi<br>
             &nbsp;* coret yang tidak sesuai
         </td>
         <td width="45%" colspan="2"><strong>&nbsp;Pemohon</strong><strong>/ Kandidat</strong><strong> :</strong></td>
     </tr>
     <tr>
         <td width="20%">&nbsp;Nama</td>
-        <td width="25%" valign="top"> <?php if ($aplasesi) {
+        <td width="25%" valign="top"> <?php if ($idasesi!=null) {
                                             echo $aplasesi->nama_lengkap;
                                         } ?></td>
     </tr>
     <tr>
         <td height="80px" valign="top">&nbsp;Tanda tangan/<br>
             &nbsp;Tanggal</td>
-        <td valign="top"><img src='<?= $ttd_asesi ?>' width="100%" /><?= date_indo($aplasesi->tgl_apl) ?></td>
+            <td valign="top">
+            <?php if ($idasesi!=null && $aplasesi->ttd != "") { ?>
+            <img src='<?= $ttd_asesi ?>' width="100px" /><br><?= date_indo($aplasesi->tgl_apl) ?>
+        <?php } ?>
+        </td>
     </tr>
     <tr>
-        <td rowspan="4" valign="top"><strong>&nbsp;Catatan :</strong></td>
+        <td rowspan="4" valign="top"><strong>&nbsp;Catatan :</strong>
+        <?php if ($idasesi!=null) {
+                                            echo $aplasesi->catatan;
+                                        } ?>
+    </td>
         <td colspan="2"><strong>&nbsp;Admin LSP</strong><strong>:</strong></td>
     </tr>
     <tr>
         <td>&nbsp;Nama </td>
-        <td valign="top"></td>
+        <td valign="top"> <?php if ($idasesi!=null) {
+                                            echo $aplasesi->nama;
+                                        } ?></td>
     </tr>
     <tr>
         <td>&nbsp;No. Reg</td>
@@ -330,6 +356,10 @@ $datakop = $this->M_Setting->getkop();
     <tr>
         <td height="80px" valign="top">&nbsp;Tanda tangan/<br>
             &nbsp;Tanggal</td>
-        <td valign="top"><img src='data:<?= $aplasesi->ttd_app ?>' width="100%" /><?= date_indo($aplasesi->tgl_app) ?></td>
+        <td valign="top">
+        <?php if ($idasesi!=null && $aplasesi->ttd_app != "") { ?>
+        <img src='<?= $ttd_admin ?>' width="100px" /><br><?= date_indo($aplasesi->tgl_app) ?>
+        <?php } ?>
+    </td>
     </tr>
 </table>

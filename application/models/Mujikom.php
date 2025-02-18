@@ -104,4 +104,24 @@ class Mujikom extends CI_Model
         $query = $this->db->get('tb_sertifikasi');
         return $query->result_array();
     }
+
+    function getthisser($idser)
+    {
+        $this->db->select('*, tb_sertifikasi.id as idser, tb_asesor.nama as namaasesor, tb_asesi.nama as namaasesi');
+        $this->db->join('tb_asesor', 'tb_asesor.id = tb_sertifikasi.id_asesor');
+        $this->db->join('tb_asesi', 'tb_asesi.id = tb_sertifikasi.id_asesi');
+        $this->db->join('tb_paket', 'tb_paket.id = tb_sertifikasi.id_paket');
+        $this->db->join('tb_tuk', 'tb_tuk.id = tb_paket.id_tuk');
+        $this->db->where('tb_sertifikasi.id', $idser);
+        $query = $this->db->get('tb_sertifikasi');
+        return $query->row_array();
+    }
+
+    function getserasesi($idasesi)
+    {
+        $this->db->select('id');
+        $this->db->where('id_asesi', $idasesi);
+        $query = $this->db->get('tb_sertifikasi');
+        return $query->row()->id;
+    }
 }

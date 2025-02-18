@@ -91,6 +91,7 @@
                                                 <center>
                                                     <div class="btn btn-group">
                                                         <a href="<?= base_url('ujikom/hapusrekam/' . $data['idser'] . '/' . $datapaket['idpak'])  ?> " class="btn btn-danger" onclick="return confirm('Yakin Mau Dihapus ?')"><i class="fa fa-trash"></i></a>
+                                                        <a href="<?= base_url('ujikom/cetakrekam/' . $data['idser'] . '/' . $datapaket['idpak'])  ?> " class="btn btn-warning"><i class="fa fa-print"></i></a>
                                                     </div>
                                                 </center>
                                             </td>

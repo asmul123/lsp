@@ -100,20 +100,37 @@ class Apl01 extends CI_Controller
 
 		$data['dataskema'] = $this->Mskema->getskemadetail($idskema);
 		$data['dataunit'] = $this->Mskema->getunit($data['dataskema']['id']);
+		$data['idasesi'] = $idasesi;
 		if ($idasesi) {
 			$data['aplasesi'] = $this->Mapl01->getapl01asesi($idasesi);
-			$dataURI    = $data['aplasesi']['ttd'];
+			$dataURI    = $data['aplasesi']->ttd;
 			$dataPieces = explode(',', $dataURI);
-			if ($dataPieces[0] == "image/png;base64") {
+			if ($dataPieces[0] == "data:image/png;base64") {
 				$encodedImg = $dataPieces[1];
 				$decodedImg = base64_decode($encodedImg);
 
 				//  Check if image was properly decoded
 				if ($decodedImg !== false) {
-					$gbr = '../assets/img/tmp/ttd_asesi.png';
+					$gbr = './assets/img/tmp/ttd_asesi.png';
 					if (file_put_contents($gbr, $decodedImg) !== false) {
 						if ($gbr) {
-							$data['ttd_asesi'] = $gbr;
+							$data['ttd_asesi'] = base_url().'assets/img/tmp/ttd_asesi.png';
+						}
+					}
+				}
+			}
+			$dataURI2    = $data['aplasesi']->ttd_app;
+			$dataPieces2 = explode(',', $dataURI2);
+			if ($dataPieces2[0] == "data:image/png;base64") {
+				$encodedImg2 = $dataPieces2[1];
+				$decodedImg2 = base64_decode($encodedImg2);
+
+				//  Check if image was properly decoded
+				if ($decodedImg2 !== false) {
+					$gbr2 = './assets/img/tmp/ttd_admin.png';
+					if (file_put_contents($gbr2, $decodedImg2) !== false) {
+						if ($gbr2) {
+							$data['ttd_admin'] = base_url().'assets/img/tmp/ttd_admin.png';
 						}
 					}
 				}
